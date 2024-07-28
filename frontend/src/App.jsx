@@ -5,6 +5,7 @@ function App() {
   for (let i = 1; i <= 64; i++) {
     buttons.push(
       <button
+        type="button"
         key={i}
         className="bg-transparent border border-slate-600 text-mybl p-2 hover:bg-cyan-950 focus:bg-cyan-950 flex items-center justify-center"
       >
@@ -13,7 +14,7 @@ function App() {
     );
   }
   return (
-    <main className=" relative mt-5 xl:mt-10 h-[88svh] w-full p-5 flex flex-col xl:gap-10 justify-center items-center">
+    <main className=" relative mt-5 xl:mt-10 h-[88svh] min-h-[650px] w-full  flex flex-col xl:gap-10 justify-center items-center">
       <div className=" relative w-full text-center text-base xl:text-4xl text-mybl font-bold"><h1>ATTENDANCE VERIFICATION</h1></div>
       <form className=" relative w-full h-full flex flex-col gap-10 py-10 max-w-[80%] xl:max-w-[60%] px-5">
         <div className="w-full h-full grid grid-cols-1 grid-rows-2 xl:grid-cols-2 xl:grid-rows-1 gap-5  justify-center items-start">
@@ -46,13 +47,14 @@ function App() {
                 <option value="2 - 4" className=" text-black">02 - 04</option>
               </select>
             </div>
+
           </div>
 
           <div className="w-full h-full relative grid grid-cols-8 grid-rows-8 ">
             {buttons}
           </div>
         </div>
-        <button className=" bg-blue-800 text-white rounded-lg">SUBMIT</button>
+        <button type="submit" className=" bg-blue-800 text-white rounded-lg">SUBMIT</button>
       </form>
 
     </main>
