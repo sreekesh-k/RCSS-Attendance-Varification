@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Mathematics",
+        "teacher": "John Doe",
+        "students": [
+            "Alice Smith",
+            "Bob Johnson",
+            "Charlie Davis"
+        ]
+    },
+    {
+        "name": "Physics",
+        "teacher": "Jane Doe",
+        "students": [
+            "Diana Evans",
+            "Evan Parker",
+            "Frank Wright"
+        ]
+    },
+    {
+        "name": "Chemistry",
+        "teacher": "James Smith",
+        "students": [
+            "George Hall",
+            "Hannah Allen",
+            "Ivy Thomas"
+        ]
+    },
+    {
+        "name": "Biology",
+        "teacher": "Emily Brown",
+        "students": [
+            "Jack Wilson",
+            "Katie Martinez",
+            "Liam Young"
+        ]
+    },
+    {
+        "name": "History",
+        "teacher": "Michael Johnson",
+        "students": [
+            "Nina Robinson",
+            "Oliver Green",
+            "Peter Hill"
+        ]
+    },
+    {
+        "name": "Geography",
+        "teacher": "Olivia Lee",
+        "students": [
+            "Quinn Adams",
+            "Ryan Clark",
+            "Sophia Lewis"
+        ]
+    },
+    {
+        "name": "English",
+        "teacher": "Sophia White",
+        "students": [
+            "Tommy Walker",
+            "Uma King",
+            "Vera Scott"
+        ]
+    },
+    {
+        "name": "Computer Science",
+        "teacher": "Lucas Harris",
+        "students": [
+            "William Baker",
+            "Xander Perez",
+            "Yara Collins"
+        ]
+    },
+    {
+        "name": "Art",
+        "teacher": "Emma Turner",
+        "students": [
+            "Zoe Mitchell",
+            "Adam Phillips",
+            "Bella Ramirez"
+        ]
+    },
+    {
+        "name": "Physical Education",
+        "teacher": "Liam Carter",
+        "students": [
+            "Chris Evans",
+            "Dana Cooper",
+            "Eli Murphy"
+        ]
+    }
+]
