@@ -39,40 +39,39 @@ function App() {
   };
 
   return (
-    <div>
-      <label>
-        Select Course:
-        <select value={selectedCourse} onChange={handleCourseChange}>
-          <option value="">--Select Course--</option>
+    <main className=' w-full h-[88svh] grid place-items-center'>
+      <div className=' grid place-items-center gap-5 text-white p-10 border border-slate-100 rounded-md min-h-[25%]'>
+
+        <select value={selectedCourse} onChange={handleCourseChange} className=' bg-transparent border border-slate-400 rounded-lg'>
+          <option value="" className=' text-black'>--Select Course--</option>
           {courses.map((course, index) => (
-            <option key={index} value={course}>{course}</option>
+            <option key={index} value={course} className=' text-black'>{course}</option>
           ))}
         </select>
-      </label>
 
-      {selectedCourse && (
-        <label>
-          Select Teacher:
-          <select value={selectedTeacher} onChange={handleTeacherChange}>
-            <option value="">--Select Teacher--</option>
+
+        {selectedCourse && (
+          <select value={selectedTeacher} onChange={handleTeacherChange} className=' bg-transparent border border-slate-400 rounded-lg'>
+            <option value="" className=' text-black'>--Select Teacher--</option>
             {teachers.map((teacher, index) => (
-              <option key={index} value={teacher}>{teacher}</option>
+              <option key={index} value={teacher} className=' text-black' >{teacher}</option>
             ))}
           </select>
-        </label>
-      )}
 
-      {selectedTeacher && (
-        <div>
-          <h3>Students:</h3>
-          <ul>
-            {students.map((student, index) => (
-              <li key={index}>{student}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+        )}
+
+        {selectedTeacher && (
+          <div>
+            <h3>Students:</h3>
+            <ul>
+              {students.map((student, index) => (
+                <li key={index}>{student}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </main>
   );
 }
 
