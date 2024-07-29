@@ -1,2 +1,2 @@
-# RCSS-Attendance-Varification
+# RCSS-Attendance-Verification
  
