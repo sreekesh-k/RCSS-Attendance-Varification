@@ -21,4 +21,12 @@ router.post('/', async (req, res) => {
   }
 });
 
+
+router.route('/all').get((req, res) => {
+  Log.find()
+    .then(logs => res.json(logs))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
 module.exports = router;

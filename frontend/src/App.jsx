@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
 
 function App() {
   const [data, setData] = useState([]);
@@ -78,7 +79,25 @@ function App() {
         setSelectedStudents([]);
         setDate(new Date().toISOString().split('T')[0]);
       })
-      .catch(error => { window.alert("Success"); console.error('Error creating log entry:', error) });
+      .catch(error => { window.alert("Error"); console.error('Error creating log entry:', error) });
+  };
+
+  const handleDownloadLogs = () => {
+    fetch('http://localhost:5000/logs/all')
+      .then(response => response.json())
+      .then(logs => {
+        const processedLogs = logs.map(log => ({
+          ...log,
+          students: log.students.join(', '),
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(processedLogs);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
+
+        XLSX.writeFile(workbook, 'logs.xlsx');
+      })
+      .catch(error => console.error('Error fetching logs:', error));
   };
 
   return (
@@ -133,6 +152,10 @@ function App() {
             <button type='button' className=' bg-mybl px-4 py-2 rounded-lg' onClick={handleSubmit}>SUBMIT</button>
           </div>
         )}
+
+        <div>
+          <button type='button' className=' bg-mybl px-4 py-2 rounded-lg' onClick={handleDownloadLogs}>Download Logs as Excel</button>
+        </div>
       </div>
     </main>
   );
