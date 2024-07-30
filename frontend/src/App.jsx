@@ -10,6 +10,9 @@ function App() {
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]); 
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:5000/courses')
@@ -56,7 +59,7 @@ function App() {
 
   const handleSubmit = () => {
     const logEntry = {
-      dateFilledByUser: date,
+      date: date,
       courseName: selectedCourse,
       teacherName: selectedTeacher,
       students: selectedStudents,
@@ -83,7 +86,11 @@ function App() {
   };
 
   const handleDownloadLogs = () => {
-    fetch('http://localhost:5000/logs/all')
+    setShowConfirmation(true);
+  };
+
+  const confirmDownload = () => {
+    fetch(`http://localhost:5000/logs/all?startDate=${startDate}&endDate=${endDate}`)
       .then(response => response.json())
       .then(logs => {
         const processedLogs = logs.map(log => ({
@@ -93,16 +100,21 @@ function App() {
 
         const worksheet = XLSX.utils.json_to_sheet(processedLogs);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
 
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
         XLSX.writeFile(workbook, 'logs.xlsx');
+        setShowConfirmation(false);
       })
       .catch(error => console.error('Error fetching logs:', error));
   };
 
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
   return (
-    <main className=' w-full h-[88svh] grid place-items-center'>
-      <div className=' grid place-items-center gap-5 text-white p-10 border border-slate-100 rounded-md min-h-[25%]'>
+    <main className='w-full h-[88svh] grid place-items-center'>
+      <div className='grid place-items-center gap-5 text-white p-10 border border-slate-100 rounded-md min-h-[25%]'>
 
         <input
           type="date"
@@ -110,18 +122,18 @@ function App() {
           onChange={handleDateChange}
           className='bg-transparent border border-slate-400 rounded-lg px-2'
         />
-        <select value={selectedCourse} onChange={handleCourseChange} className=' bg-transparent border border-slate-400 rounded-lg'>
-          <option value="" className=' text-black'>--Select Course--</option>
+        <select value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
+          <option value="" className='text-black'>--Select Course--</option>
           {courses.map((course, index) => (
-            <option key={index} value={course} className=' text-black'>{course}</option>
+            <option key={index} value={course} className='text-black'>{course}</option>
           ))}
         </select>
 
         {selectedCourse && (
-          <select value={selectedTeacher} onChange={handleTeacherChange} className=' bg-transparent border border-slate-400 rounded-lg'>
-            <option value="" className=' text-black'>--Select Teacher--</option>
+          <select value={selectedTeacher} onChange={handleTeacherChange} className='bg-transparent border border-slate-400 rounded-lg'>
+            <option value="" className='text-black'>--Select Teacher--</option>
             {teachers.map((teacher, index) => (
-              <option key={index} value={teacher} className=' text-black' >{teacher}</option>
+              <option key={index} value={teacher} className='text-black'>{teacher}</option>
             ))}
           </select>
         )}
@@ -149,13 +161,38 @@ function App() {
 
         {selectedCourse && selectedTeacher && (
           <div>
-            <button type='button' className=' bg-mybl px-4 py-2 rounded-lg' onClick={handleSubmit}>SUBMIT</button>
+            <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={handleSubmit}>SUBMIT</button>
           </div>
         )}
 
         <div>
-          <button type='button' className=' bg-mybl px-4 py-2 rounded-lg' onClick={handleDownloadLogs}>Download Logs as Excel</button>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className='bg-transparent border border-slate-400 rounded-lg px-2'
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className='bg-transparent border border-slate-400 rounded-lg px-2'
+          />
+          <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={handleDownloadLogs}>Download Logs as Excel</button>
         </div>
+
+        {showConfirmation && (
+          <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+            <div className='bg-white p-5 rounded-lg text-black'>
+              <h3 className='mb-4'>Confirm Download</h3>
+              <p>Are you sure you want to download logs between {startDate} and {endDate}?</p>
+              <div className='mt-4 flex justify-end gap-2'>
+                <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={confirmDownload}>Confirm</button>
+                <button type='button' className='bg-red-500 px-4 py-2 rounded-lg' onClick={handleCancel}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

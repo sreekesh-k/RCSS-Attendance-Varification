@@ -22,8 +22,23 @@ router.post('/', async (req, res) => {
 });
 
 
+
 router.route('/all').get((req, res) => {
-  Log.find()
+  const { startDate, endDate } = req.query;
+
+  let query = {};
+
+  if (startDate && endDate) {
+    const start = new Date(startDate).toISOString();
+    const end = new Date(endDate).toISOString();
+
+    query.date = {
+      $gte: start,
+      $lte: end
+    };
+  }
+
+  Log.find(query)
     .then(logs => res.json(logs))
     .catch(err => res.status(400).json('Error: ' + err));
 });
