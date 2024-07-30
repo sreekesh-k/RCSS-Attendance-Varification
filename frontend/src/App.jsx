@@ -1,64 +1,223 @@
-
+import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
 
 function App() {
-  const buttons = [];
-  for (let i = 1; i <= 64; i++) {
-    buttons.push(
-      <button
-        type="button"
-        key={i}
-        className="bg-transparent border border-slate-600 text-mybl p-2 hover:bg-cyan-950 focus:bg-cyan-950 flex items-center justify-center"
-      >
-        {i}
-      </button>
-    );
-  }
+  const [data, setData] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [teachers, setTeachers] = useState([]);
+  const [selectedTeacher, setSelectedTeacher] = useState('');
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/courses')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setData(data);
+        setCourses([...new Set(data.map(item => item.name))]);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+  const handleCourseChange = (event) => {
+    const course = event.target.value;
+    setSelectedCourse(course);
+
+    const courseData = data.filter(item => item.name === course);
+    setTeachers([...new Set(courseData.flatMap(item => item.teacher))]);
+  };
+
+  const handleTeacherChange = (event) => {
+    setSelectedTeacher(event.target.value);
+  };
+
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+  };
+
+  const handleStudentChange = (event) => {
+    const student = event.target.value;
+    if (event.target.checked) {
+      setSelectedStudents([...selectedStudents, student]);
+    } else {
+      setSelectedStudents(selectedStudents.filter(s => s !== student));
+    }
+  };
+
+  const handleSubmit = () => {
+    const logEntry = {
+      date: date,
+      courseName: selectedCourse,
+      teacherName: selectedTeacher,
+      students: selectedStudents,
+    };
+
+    fetch('http://localhost:5000/logs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(logEntry),
+    })
+      .then(response => response.json())
+      .then(data => {
+        window.alert("Success");
+        console.log('Log entry created:', data);
+        setSelectedCourse('');
+        setSelectedTeacher('');
+        setSelectedStudents([]);
+        setDate(new Date().toISOString().split('T')[0]);
+      })
+      .catch(error => { window.alert("Error"); console.error('Error creating log entry:', error) });
+  };
+
+  const handleDownloadLogs = () => {
+    setShowConfirmation(true);
+  };
+
+  const confirmDownload = () => {
+    fetch(`http://localhost:5000/logs/all?startDate=${startDate}&endDate=${endDate}`)
+      .then(response => response.json())
+      .then(logs => {
+        const processedLogs = logs.map(log => ({
+          ...log,
+          students: log.students.join(', '),
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(processedLogs);
+        const workbook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
+        XLSX.writeFile(workbook, 'logs.xlsx');
+        setShowConfirmation(false);
+      })
+      .catch(error => console.error('Error fetching logs:', error));
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const renderCheckboxes = () => {
+    let checkboxes = [];
+    for (let i = 1; i <= 72; i++) {
+      checkboxes.push(
+        <li key={i} className='relative flex items-center'>
+          <label
+            htmlFor={`checkbox-${i}`}
+            className={`flex items-center justify-center w-10 h-10 border border-slate-500 rounded-md cursor-pointer 
+            ${selectedStudents.includes(i.toString()) ? 'bg-mybl text-white' : 'bg-transparent hover:bg-gray-200'}`}
+          >
+            <input
+              id={`checkbox-${i}`}
+              type="checkbox"
+              value={i}
+              onChange={handleStudentChange}
+              checked={selectedStudents.includes(i.toString())}
+              className='absolute opacity-0 w-0 h-0'
+            />
+            {i.toString().padStart(2, '0')}
+          </label>
+        </li>
+      );
+    }
+    return checkboxes;
+  };
+
   return (
-    <main className=" relative mt-5 xl:mt-10 h-[88svh] min-h-[650px] w-full  flex flex-col xl:gap-10 justify-center items-center">
-      <div className=" relative w-full text-center text-base xl:text-4xl text-mybl font-bold"><h1>ATTENDANCE VERIFICATION</h1></div>
-      <form className=" relative w-full h-full flex flex-col gap-10 py-10 max-w-[80%] xl:max-w-[60%] px-5">
-        <div className="w-full h-full grid grid-cols-1 grid-rows-2 xl:grid-cols-2 xl:grid-rows-1 gap-5  justify-center items-start">
-          <div className=" w-full h-full flex flex-col gap-5 xl:gap-10">
-            <div className=" w-full flex-1">
-              <label htmlFor="course" className=" text-mybl">COURSE</label><br />
-              <select id="course" name="course" className=" bg-transparent border border-slate-600 focus:border-mybl hover:border-mybl text-slate-600 px-5 rounded-lg w-full">
-                <option value="MCA" className=" text-black">MCA</option>
-                <option value="MSC" className=" text-black">MSC</option>
-              </select>
+    <>
+      <header className='w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-black bg-opacity-35'>
+        <div className='relative w-fit'>
+          <label htmlFor="from">From :</label>
+          <input
+            id='from'
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
+          />
+        </div>
+        <div className='relative w-fit'>
+          <label htmlFor="to">To :</label>
+          <input
+            id='to'
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
+          />
+        </div>
+        <button type='button' className='bg-mybl px-4 py-2 rounded-lg block' onClick={handleDownloadLogs}>Excel</button>
+      </header>
+      {showConfirmation && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+          <div className='bg-white p-5 rounded-lg text-black'>
+            <h3 className='mb-4'>Confirm Download</h3>
+            <p>Are you sure you want to download logs between {startDate} and {endDate}?</p>
+            <div className='mt-4 flex justify-end gap-2'>
+              <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={confirmDownload}>Confirm</button>
+              <button type='button' className='bg-red-500 px-4 py-2 rounded-lg' onClick={handleCancel}>Cancel</button>
             </div>
-            <div className=" w-full flex-1">
-              <label htmlFor="semester" className=" text-mybl">SEMESTER</label><br />
-              <select id="semester" name="semester" className=" bg-transparent border border-slate-600 focus:border-mybl hover:border-mybl text-slate-600 px-5 rounded-lg w-full">
-                <option value="1" className=" text-black">Sem 1</option>
-                <option value="2" className=" text-black">Sem 2</option>
-                <option value="3" className=" text-black">Sem 3</option>
-                <option value="4" className=" text-black">Sem 4</option>
-              </select>
-            </div>
-            <div className=" w-full flex-1">
-              <label htmlFor="date" className=" text-mybl">DATE</label><br />
-              <input type="date" id="date" name="date" className=" bg-transparent border border-slate-600 focus:border-mybl hover:border-mybl text-slate-600 px-5 rounded-lg w-full" />
-            </div>
-            <div className=" w-full flex-1">
-              <label htmlFor="course" className=" text-mybl">TIME SLOT</label><br />
-              <select id="course" name="course" className=" bg-transparent border border-slate-600 focus:border-mybl hover:border-mybl text-slate-600 px-5 rounded-lg w-full">
-                <option value="9 - 11" className=" text-black">09 - 11</option>
-                <option value="11 - 11" className=" text-black">11 - 01</option>
-                <option value="2 - 4" className=" text-black">02 - 04</option>
-              </select>
-            </div>
-
-          </div>
-
-          <div className="w-full h-full relative grid grid-cols-8 grid-rows-8 ">
-            {buttons}
           </div>
         </div>
-        <button type="submit" className=" bg-blue-800 text-white rounded-lg">SUBMIT</button>
-      </form>
+      )}
+      <main className='w-full mt-10 relative grid place-items-center'>
+        <div className='grid place-items-start gap-5 text-white p-10 rounded-md min-h-[25%]'>
+          <div>
+            <label htmlFor="date">Date:</label>
+            <input
+              id='date'
+              type="date"
+              value={date}
+              onChange={handleDateChange}
+              className='bg-transparent border border-slate-400 rounded-lg px-1'
+            />
+          </div>
+          <div>
+            <label htmlFor="course">Course:</label>
+            <select id="course" value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
+              <option value="" className='text-black'>--Select Course--</option>
+              {courses.map((course, index) => (
+                <option key={index} value={course} className='text-black'>{course}</option>
+              ))}
+            </select>
+          </div>
 
-    </main>
-  )
+          {selectedCourse && (
+            <div>
+              <label htmlFor="teachers">Teachers:</label>
+              <select id="teachers" value={selectedTeacher} onChange={handleTeacherChange} className='bg-transparent border border-slate-400 rounded-lg'>
+                <option value="" className='text-black'>--Select Teacher--</option>
+                {teachers.map((teacher, index) => (
+                  <option key={index} value={teacher} className='text-black'>{teacher}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {selectedCourse && selectedTeacher && (
+            <div>
+              <h3>Students:</h3>
+              <ul className='grid grid-cols-9 gap-1'>
+                {renderCheckboxes()}
+              </ul>
+            </div>
+          )}
+
+          {selectedCourse && selectedTeacher && (
+            <div>
+              <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={handleSubmit}>SUBMIT</button>
+            </div>
+          )}
+        </div>
+      </main>
+    </>
+  );
 }
 
-export default App
+export default App;
