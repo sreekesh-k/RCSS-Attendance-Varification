@@ -1,6 +1,8 @@
 [
     {
+
         "name": "BCA",
+        "graduation":"UG",
         "teacher": [
             "Thomas",
             "Minu"
@@ -8,6 +10,7 @@
     },
     {
         "name": "BSC",
+        "graduation":"UG",
         "teacher": [
             "Sabu",
             "Shoby"
@@ -15,6 +18,7 @@
     },
     {
         "name": "BSW",
+        "graduation":"UG",
         "teacher": [
             "Kiran",
             "Suresh"
@@ -22,6 +26,7 @@
     },
     {
         "name": "BCOM",
+        "graduation":"UG",
         "teacher": [
             "Ahmed",
             "Shinoy"
@@ -29,6 +34,7 @@
     },
     {
         "name": "BTech",
+        "graduation":"UG",
         "teacher": [
             "Anas",
             "Sumesh"
@@ -36,6 +42,7 @@
     },
     {
         "name": "MCA",
+        "graduation":"PG",
         "teacher": [
             "Shiju",
             "Bindya"
@@ -43,6 +50,7 @@
     },
     {
         "name": "MSC",
+        "graduation":"PG",
         "teacher": [
             "Keerthy",
             "Sabeen"
@@ -50,6 +58,7 @@
     },
     {
         "name": "MSW",
+        "graduation":"PG",
         "teacher": [
             "Kiran",
             "Paul"
@@ -57,6 +66,7 @@
     },
     {
         "name": "MCOM",
+        "graduation":"PG",
         "teacher": [
             "Bharathy",
             "Nihal"
@@ -64,6 +74,7 @@
     },
     {
         "name": "MTech",
+        "graduation":"PG",
         "teacher": [
             "Shinoy",
             "Benny"

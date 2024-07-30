@@ -3,6 +3,8 @@ import * as XLSX from 'xlsx';
 
 function App() {
   const [data, setData] = useState([]);
+  const [graduation, setGraduation] = useState([]);
+  const [selectedGraduation, setSelectedGraduation] = useState('');
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [teachers, setTeachers] = useState([]);
@@ -19,17 +21,25 @@ function App() {
       .then(data => {
         console.log(data);
         setData(data);
-        setCourses([...new Set(data.map(item => item.name))]);
+        setGraduation([...new Set(data.map(item => item.graduation))]);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
+
+  const handleGraduationChange = (event) => {
+    const graduation = event.target.value;
+    setSelectedGraduation(graduation);
+
+    const graduationData = data.filter(item => item.graduation === graduation);
+    setCourses([...new Set(graduationData.map(item => item.name))]);
+  };
 
   const handleCourseChange = (event) => {
     const course = event.target.value;
     setSelectedCourse(course);
 
-    const courseData = data.filter(item => item.name === course);
-    setTeachers([...new Set(courseData.flatMap(item => item.teacher))]);
+    const courseData = data.find(item => item.name === course);
+    setTeachers(courseData ? courseData.teacher : []);
   };
 
   const handleTeacherChange = (event) => {
@@ -52,6 +62,7 @@ function App() {
   const handleSubmit = () => {
     const logEntry = {
       date: date,
+      graduation: selectedGraduation,
       courseName: selectedCourse,
       teacherName: selectedTeacher,
       students: selectedStudents,
@@ -85,19 +96,34 @@ function App() {
       .then(response => response.json())
       .then(logs => {
         const processedLogs = logs.map(log => ({
-          ...log,
-          students: log.students.join(', '),
+          date: log.date,
+          courseName: log.courseName,
+          teacherName: log.teacherName,
+          students: log.students.join(', '), // Join students into a comma-separated string
+          createdAt: log.createdAt,
+          updatedAt: log.updatedAt,
         }));
-
-        const worksheet = XLSX.utils.json_to_sheet(processedLogs);
+  
+        // Create a new workbook and worksheet
+        const worksheet = XLSX.utils.json_to_sheet(processedLogs, {
+          header: ["date", "courseName", "teacherName", "students", "createdAt", "updatedAt"]
+        });
         const workbook = XLSX.utils.book_new();
-
+  
+        // Append the worksheet to the workbook
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
+  
+        // Write the workbook to a file
         XLSX.writeFile(workbook, 'logs.xlsx');
         setShowConfirmation(false);
       })
       .catch(error => console.error('Error fetching logs:', error));
   };
+  
+  
+  
+  
+  
 
   const handleCancel = () => {
     setShowConfirmation(false);
@@ -179,14 +205,26 @@ function App() {
             />
           </div>
           <div>
-            <label htmlFor="course">Course:</label>
-            <select id="course" value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
-              <option value="" className='text-black'>--Select Course--</option>
-              {courses.map((course, index) => (
-                <option key={index} value={course} className='text-black'>{course}</option>
+            <label htmlFor="graduation">Graduation:</label>
+            <select id="graduation" value={selectedGraduation} onChange={handleGraduationChange} className='bg-transparent border border-slate-400 rounded-lg'>
+              <option value="" className='text-black'>UG/PG</option>
+              {graduation.map((grad, index) => (
+                <option key={index} value={grad} className='text-black'>{grad}</option>
               ))}
             </select>
           </div>
+
+          {selectedGraduation && (
+            <div>
+              <label htmlFor="course">Course:</label>
+              <select id="course" value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
+                <option value="" className='text-black'>--Select Course--</option>
+                {courses.map((course, index) => (
+                  <option key={index} value={course} className='text-black'>{course}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {selectedCourse && (
             <div>
