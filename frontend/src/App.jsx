@@ -7,7 +7,6 @@ function App() {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [teachers, setTeachers] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState('');
-  const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]);
@@ -30,18 +29,11 @@ function App() {
     setSelectedCourse(course);
 
     const courseData = data.filter(item => item.name === course);
-    setTeachers([...new Set(courseData.map(item => item.teacher))]);
+    setTeachers([...new Set(courseData.flatMap(item => item.teacher))]);
   };
 
   const handleTeacherChange = (event) => {
-    const teacher = event.target.value;
-    setSelectedTeacher(teacher);
-
-    const studentsData = data
-      .filter(item => item.name === selectedCourse && item.teacher === teacher)
-      .flatMap(item => item.students);
-
-    setStudents(studentsData);
+    setSelectedTeacher(event.target.value);
   };
 
   const handleDateChange = (event) => {
@@ -78,7 +70,6 @@ function App() {
         console.log('Log entry created:', data);
         setSelectedCourse('');
         setSelectedTeacher('');
-        setStudents([]);
         setSelectedStudents([]);
         setDate(new Date().toISOString().split('T')[0]);
       })
@@ -112,18 +103,46 @@ function App() {
     setShowConfirmation(false);
   };
 
+  const renderCheckboxes = () => {
+    let checkboxes = [];
+    for (let i = 1; i <= 72; i++) {
+      checkboxes.push(
+        <li key={i} className='relative flex items-center'>
+          <label
+            htmlFor={`checkbox-${i}`}
+            className={`flex items-center justify-center w-10 h-10 border border-slate-500 rounded-md cursor-pointer 
+            ${selectedStudents.includes(i.toString()) ? 'bg-mybl text-white' : 'bg-transparent hover:bg-gray-200'}`}
+          >
+            <input
+              id={`checkbox-${i}`}
+              type="checkbox"
+              value={i}
+              onChange={handleStudentChange}
+              checked={selectedStudents.includes(i.toString())}
+              className='absolute opacity-0 w-0 h-0'
+            />
+            {i.toString().padStart(2, '0')}
+          </label>
+        </li>
+      );
+    }
+    return checkboxes;
+  };
+
   return (
     <>
-      <header className=' w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-black bg-opacity-35'>
-        <div className=' relative w-fit'> <label htmlFor="from">From :</label>
+      <header className='w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-black bg-opacity-35'>
+        <div className='relative w-fit'>
+          <label htmlFor="from">From :</label>
           <input
             id='from'
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
-          /></div>
-        <div className=' relative w-fit'>
+          />
+        </div>
+        <div className='relative w-fit'>
           <label htmlFor="to">To :</label>
           <input
             id='to'
@@ -131,7 +150,8 @@ function App() {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
-          /></div>
+          />
+        </div>
         <button type='button' className='bg-mybl px-4 py-2 rounded-lg block' onClick={handleDownloadLogs}>Excel</button>
       </header>
       {showConfirmation && (
@@ -156,7 +176,8 @@ function App() {
               value={date}
               onChange={handleDateChange}
               className='bg-transparent border border-slate-400 rounded-lg px-1'
-            /></div>
+            />
+          </div>
           <div>
             <label htmlFor="course">Course:</label>
             <select id="course" value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
@@ -169,7 +190,7 @@ function App() {
 
           {selectedCourse && (
             <div>
-               <label htmlFor="teachers">Teachers:</label>
+              <label htmlFor="teachers">Teachers:</label>
               <select id="teachers" value={selectedTeacher} onChange={handleTeacherChange} className='bg-transparent border border-slate-400 rounded-lg'>
                 <option value="" className='text-black'>--Select Teacher--</option>
                 {teachers.map((teacher, index) => (
@@ -179,23 +200,11 @@ function App() {
             </div>
           )}
 
-          {selectedTeacher && (
+          {selectedCourse && selectedTeacher && (
             <div>
               <h3>Students:</h3>
-              <ul>
-                {students.map((student, index) => (
-                  <li key={index}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value={student}
-                        onChange={handleStudentChange}
-                        checked={selectedStudents.includes(student)}
-                      />
-                      {student}
-                    </label>
-                  </li>
-                ))}
+              <ul className='grid grid-cols-9 gap-1'>
+                {renderCheckboxes()}
               </ul>
             </div>
           )}
@@ -206,7 +215,8 @@ function App() {
             </div>
           )}
         </div>
-      </main></>
+      </main>
+    </>
   );
 }
 

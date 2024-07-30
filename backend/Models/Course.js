@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 
 const courseSchema = new Schema({
   name: { type: String, required: true },
-  teacher: { type: String, required: true },
-  students: [{ type: String, required: true }],
+  teacher: [{ type: String, required: true }]
 }, {
   timestamps: true,
 });

@@ -1,92 +1,107 @@
 [
     {
         "name": "Mathematics",
-        "teacher": "John Doe",
-        "students": [
-            "Alice Smith",
-            "Bob Johnson",
-            "Charlie Davis"
-        ]
-    },
-    {
-        "name": "Physics",
-        "teacher": "Jane Doe",
-        "students": [
-            "Diana Evans",
-            "Evan Parker",
-            "Frank Wright"
-        ]
-    },
-    {
-        "name": "Chemistry",
-        "teacher": "James Smith",
-        "students": [
-            "George Hall",
-            "Hannah Allen",
-            "Ivy Thomas"
-        ]
-    },
-    {
-        "name": "Biology",
-        "teacher": "Emily Brown",
-        "students": [
-            "Jack Wilson",
-            "Katie Martinez",
-            "Liam Young"
+        "teacher": [
+            "Alice Johnson",
+            "Eve Adams"
         ]
     },
     {
         "name": "History",
-        "teacher": "Michael Johnson",
-        "students": [
-            "Nina Robinson",
-            "Oliver Green",
-            "Peter Hill"
+        "teacher": [
+            "Bob Smith",
+            "Mia Davis"
         ]
     },
     {
-        "name": "Geography",
-        "teacher": "Olivia Lee",
-        "students": [
-            "Quinn Adams",
-            "Ryan Clark",
-            "Sophia Lewis"
+        "name": "Science",
+        "teacher": [
+            "Carol Brown",
+            "James Wilson"
         ]
     },
     {
-        "name": "English",
-        "teacher": "Sophia White",
-        "students": [
-            "Tommy Walker",
-            "Uma King",
-            "Vera Scott"
+        "name": "Literature",
+        "teacher": [
+            "David Wilson",
+            "Laura Martin"
+        ]
+    },
+    {
+        "name": "Biology",
+        "teacher": [
+            "Emily Clark",
+            "Daniel Lee"
+        ]
+    },
+    {
+        "name": "Chemistry",
+        "teacher": [
+            "Frank Harris",
+            "Sophia Turner"
+        ]
+    },
+    {
+        "name": "Physics",
+        "teacher": [
+            "Grace Walker",
+            "Ryan Lewis"
         ]
     },
     {
         "name": "Computer Science",
-        "teacher": "Lucas Harris",
-        "students": [
-            "William Baker",
-            "Xander Perez",
-            "Yara Collins"
+        "teacher": [
+            "Henry Scott",
+            "Olivia Hill"
+        ]
+    },
+    {
+        "name": "Economics",
+        "teacher": [
+            "Ivy Green",
+            "Jack Young"
+        ]
+    },
+    {
+        "name": "Geography",
+        "teacher": [
+            "Kylie Adams",
+            "Michael Wright"
         ]
     },
     {
         "name": "Art",
-        "teacher": "Emma Turner",
-        "students": [
-            "Zoe Mitchell",
-            "Adam Phillips",
-            "Bella Ramirez"
+        "teacher": [
+            "Liam Miller",
+            "Zoe Walker"
+        ]
+    },
+    {
+        "name": "Music",
+        "teacher": [
+            "Noah King",
+            "Nora Allen"
         ]
     },
     {
         "name": "Physical Education",
-        "teacher": "Liam Carter",
-        "students": [
-            "Chris Evans",
-            "Dana Cooper",
-            "Eli Murphy"
+        "teacher": [
+            "Oscar Thompson",
+            "Emma Young"
+        ]
+    },
+    {
+        "name": "Philosophy",
+        "teacher": [
+            "Paul Baker",
+            "Chloe Robinson"
+        ]
+    },
+    {
+        "name": "Drama",
+        "teacher": [
+            "Quinn Hall",
+            "Isabella Collins"
         ]
     }
 ]
