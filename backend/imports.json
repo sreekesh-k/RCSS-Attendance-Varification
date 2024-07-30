@@ -1,107 +1,72 @@
 [
     {
-        "name": "Mathematics",
+        "name": "BCA",
         "teacher": [
-            "Alice Johnson",
-            "Eve Adams"
+            "Thomas",
+            "Minu"
         ]
     },
     {
-        "name": "History",
+        "name": "BSC",
         "teacher": [
-            "Bob Smith",
-            "Mia Davis"
+            "Sabu",
+            "Shoby"
         ]
     },
     {
-        "name": "Science",
+        "name": "BSW",
         "teacher": [
-            "Carol Brown",
-            "James Wilson"
+            "Kiran",
+            "Suresh"
         ]
     },
     {
-        "name": "Literature",
+        "name": "BCOM",
         "teacher": [
-            "David Wilson",
-            "Laura Martin"
+            "Ahmed",
+            "Shinoy"
         ]
     },
     {
-        "name": "Biology",
+        "name": "BTech",
         "teacher": [
-            "Emily Clark",
-            "Daniel Lee"
+            "Anas",
+            "Sumesh"
         ]
     },
     {
-        "name": "Chemistry",
+        "name": "MCA",
         "teacher": [
-            "Frank Harris",
-            "Sophia Turner"
+            "Shiju",
+            "Bindya"
         ]
     },
     {
-        "name": "Physics",
+        "name": "MSC",
         "teacher": [
-            "Grace Walker",
-            "Ryan Lewis"
+            "Keerthy",
+            "Sabeen"
         ]
     },
     {
-        "name": "Computer Science",
+        "name": "MSW",
         "teacher": [
-            "Henry Scott",
-            "Olivia Hill"
+            "Kiran",
+            "Paul"
         ]
     },
     {
-        "name": "Economics",
+        "name": "MCOM",
         "teacher": [
-            "Ivy Green",
-            "Jack Young"
+            "Bharathy",
+            "Nihal"
         ]
     },
     {
-        "name": "Geography",
+        "name": "MTech",
         "teacher": [
-            "Kylie Adams",
-            "Michael Wright"
-        ]
-    },
-    {
-        "name": "Art",
-        "teacher": [
-            "Liam Miller",
-            "Zoe Walker"
-        ]
-    },
-    {
-        "name": "Music",
-        "teacher": [
-            "Noah King",
-            "Nora Allen"
-        ]
-    },
-    {
-        "name": "Physical Education",
-        "teacher": [
-            "Oscar Thompson",
-            "Emma Young"
-        ]
-    },
-    {
-        "name": "Philosophy",
-        "teacher": [
-            "Paul Baker",
-            "Chloe Robinson"
-        ]
-    },
-    {
-        "name": "Drama",
-        "teacher": [
-            "Quinn Hall",
-            "Isabella Collins"
+            "Shinoy",
+            "Benny"
         ]
     }
 ]
