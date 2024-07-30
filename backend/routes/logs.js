@@ -4,12 +4,12 @@ const Log = require('../models/Logs');
 
 router.post('/', async (req, res) => {
   try {
-    const { dateFilledByUser, courseName, teacherName, students } = req.body;
-    if (!dateFilledByUser || !courseName || !teacherName || !students) {
+    const { date, courseName, teacherName, students } = req.body;
+    if (!date || !courseName || !teacherName || !students) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
     const newLog = new Log({
-      dateFilledByUser,
+      date,
       courseName,
       teacherName,
       students,
