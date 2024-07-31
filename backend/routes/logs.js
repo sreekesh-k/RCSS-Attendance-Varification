@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Log = require('../models/Logs');
-
+// routes/logs.js
 router.post('/', async (req, res) => {
   try {
-    const { date, courseName, teacherName, students } = req.body;
-    if (!date || !courseName || !teacherName || !students) {
+    const { date, courseName, teacherName, students, semester } = req.body;
+    if (!date || !courseName || !teacherName || !students || semester === undefined) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
     const newLog = new Log({
@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
       courseName,
       teacherName,
       students,
+      semester, // Include semester when creating a new log
     });
     await newLog.save();
     res.status(201).json(newLog);
@@ -20,6 +21,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+
 
 
 

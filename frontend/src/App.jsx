@@ -110,16 +110,18 @@ function App() {
     fetch(`http://localhost:5000/logs/all?startDate=${startDate}&endDate=${endDate}`)
       .then(response => response.json())
       .then(logs => {
+        // Process logs to ensure semester data is included
         const processedLogs = logs.map(log => ({
           date: log.date,
           courseName: log.courseName,
-          semester: log.semester !== undefined && log.semester !== null ? log.semester : 'N/A',
+          semester: log.semester ? log.semester : 'N/A', // Ensure semester data is correctly mapped
           teacherName: log.teacherName,
           students: log.students.join(', '),
           createdAt: log.createdAt,
           updatedAt: log.updatedAt,
         }));
-    
+  
+        // Create a worksheet and workbook
         const worksheet = XLSX.utils.json_to_sheet(processedLogs, {
           header: ["date", "courseName", "semester", "teacherName", "students", "createdAt", "updatedAt"]
         });
@@ -130,6 +132,7 @@ function App() {
       })
       .catch(error => console.error('Error fetching logs:', error));
   };
+  
 
   const handleCancel = () => {
     setShowConfirmation(false);
