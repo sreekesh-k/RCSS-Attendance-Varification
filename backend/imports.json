@@ -1,83 +1,62 @@
 [
     {
-
         "name": "BCA",
-        "graduation":"UG",
-        "teacher": [
-            "Thomas",
-            "Minu"
-        ]
+        "graduation": "UG",
+        "teacher": ["Thomas", "Minu"],
+        "semester": [1, 2, 3, 4, 5, 6]
     },
     {
         "name": "BSC",
-        "graduation":"UG",
-        "teacher": [
-            "Sabu",
-            "Shoby"
-        ]
+        "graduation": "UG",
+        "teacher": ["Sabu", "Shoby"],
+        "semester": [1, 2, 3, 4, 5, 6]
     },
     {
         "name": "BSW",
-        "graduation":"UG",
-        "teacher": [
-            "Kiran",
-            "Suresh"
-        ]
+        "graduation": "UG",
+        "teacher": ["Kiran", "Suresh"],
+        "semester": [1, 2, 3, 4, 5, 6]
     },
     {
         "name": "BCOM",
-        "graduation":"UG",
-        "teacher": [
-            "Ahmed",
-            "Shinoy"
-        ]
+        "graduation": "UG",
+        "teacher": ["Ahmed", "Shinoy"],
+        "semester": [1, 2, 3, 4, 5, 6]
     },
     {
         "name": "BTech",
-        "graduation":"UG",
-        "teacher": [
-            "Anas",
-            "Sumesh"
-        ]
+        "graduation": "UG",
+        "teacher": ["Anas", "Sumesh"],
+        "semester": [1, 2, 3, 4, 5, 6]
     },
     {
         "name": "MCA",
-        "graduation":"PG",
-        "teacher": [
-            "Shiju",
-            "Bindya"
-        ]
+        "graduation": "PG",
+        "teacher": ["Shiju", "Bindya"],
+        "semester": [1, 2, 3, 4]
     },
     {
         "name": "MSC",
-        "graduation":"PG",
-        "teacher": [
-            "Keerthy",
-            "Sabeen"
-        ]
+        "graduation": "PG",
+        "teacher": ["Keerthy", "Sabeen"],
+        "semester": [1, 2, 3, 4]
     },
     {
         "name": "MSW",
-        "graduation":"PG",
-        "teacher": [
-            "Kiran",
-            "Paul"
-        ]
+        "graduation": "PG",
+        "teacher": ["Kiran", "Paul"],
+        "semester": [1, 2, 3, 4]
     },
     {
         "name": "MCOM",
-        "graduation":"PG",
-        "teacher": [
-            "Bharathy",
-            "Nihal"
-        ]
+        "graduation": "PG",
+        "teacher": ["Bharathy", "Nihal"],
+        "semester": [1, 2, 3, 4]
     },
     {
         "name": "MTech",
-        "graduation":"PG",
-        "teacher": [
-            "Shinoy",
-            "Benny"
-        ]
+        "graduation": "PG",
+        "teacher": ["Shinoy", "Benny"],
+        "semester": [1, 2, 3, 4]
     }
 ]

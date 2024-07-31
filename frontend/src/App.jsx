@@ -3,10 +3,11 @@ import * as XLSX from 'xlsx';
 
 function App() {
   const [data, setData] = useState([]);
-  const [graduation, setGraduation] = useState([]);
-  const [selectedGraduation, setSelectedGraduation] = useState('');
+  const [graduation, setGraduation] = useState('');
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
+  const [semesters, setSemesters] = useState([]);
+  const [selectedSemester, setSelectedSemester] = useState('');
   const [teachers, setTeachers] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState('');
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -21,17 +22,25 @@ function App() {
       .then(data => {
         console.log(data);
         setData(data);
-        setGraduation([...new Set(data.map(item => item.graduation))]);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   const handleGraduationChange = (event) => {
     const graduation = event.target.value;
-    setSelectedGraduation(graduation);
+    setGraduation(graduation);
 
-    const graduationData = data.filter(item => item.graduation === graduation);
-    setCourses([...new Set(graduationData.map(item => item.name))]);
+    const filteredData = data.filter(item => item.graduation === graduation);
+    setCourses([...new Set(filteredData.map(item => item.name))]);
+    setSelectedCourse('');
+    setSelectedSemester('');
+
+    // Set semesters based on graduation type
+    if (graduation === 'UG') {
+      setSemesters([1, 2, 3, 4, 5, 6]);
+    } else if (graduation === 'PG') {
+      setSemesters([1, 2, 3, 4]);
+    }
   };
 
   const handleCourseChange = (event) => {
@@ -40,6 +49,10 @@ function App() {
 
     const courseData = data.find(item => item.name === course);
     setTeachers(courseData ? courseData.teacher : []);
+  };
+
+  const handleSemesterChange = (event) => {
+    setSelectedSemester(event.target.value);
   };
 
   const handleTeacherChange = (event) => {
@@ -62,8 +75,9 @@ function App() {
   const handleSubmit = () => {
     const logEntry = {
       date: date,
-      graduation: selectedGraduation,
+      graduation: graduation,
       courseName: selectedCourse,
+      semester: selectedSemester,
       teacherName: selectedTeacher,
       students: selectedStudents,
     };
@@ -81,6 +95,7 @@ function App() {
         console.log('Log entry created:', data);
         setSelectedCourse('');
         setSelectedTeacher('');
+        setSelectedSemester('');
         setSelectedStudents([]);
         setDate(new Date().toISOString().split('T')[0]);
       })
@@ -98,32 +113,23 @@ function App() {
         const processedLogs = logs.map(log => ({
           date: log.date,
           courseName: log.courseName,
+          semester: log.semester !== undefined && log.semester !== null ? log.semester : 'N/A',
           teacherName: log.teacherName,
-          students: log.students.join(', '), // Join students into a comma-separated string
+          students: log.students.join(', '),
           createdAt: log.createdAt,
           updatedAt: log.updatedAt,
         }));
-  
-        // Create a new workbook and worksheet
+    
         const worksheet = XLSX.utils.json_to_sheet(processedLogs, {
-          header: ["date", "courseName", "teacherName", "students", "createdAt", "updatedAt"]
+          header: ["date", "courseName", "semester", "teacherName", "students", "createdAt", "updatedAt"]
         });
         const workbook = XLSX.utils.book_new();
-  
-        // Append the worksheet to the workbook
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
-  
-        // Write the workbook to a file
         XLSX.writeFile(workbook, 'logs.xlsx');
         setShowConfirmation(false);
       })
       .catch(error => console.error('Error fetching logs:', error));
   };
-  
-  
-  
-  
-  
 
   const handleCancel = () => {
     setShowConfirmation(false);
@@ -206,15 +212,29 @@ function App() {
           </div>
           <div>
             <label htmlFor="graduation">Graduation:</label>
-            <select id="graduation" value={selectedGraduation} onChange={handleGraduationChange} className='bg-transparent border border-slate-400 rounded-lg'>
-              <option value="" className='text-black'>UG/PG</option>
-              {graduation.map((grad, index) => (
-                <option key={index} value={grad} className='text-black'>{grad}</option>
-              ))}
-            </select>
+            <div id="graduation" className="flex gap-4">
+              <label>
+                <input
+                  type="radio"
+                  value="UG"
+                  checked={graduation === 'UG'}
+                  onChange={handleGraduationChange}
+                />
+                UG
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="PG"
+                  checked={graduation === 'PG'}
+                  onChange={handleGraduationChange}
+                />
+                PG
+              </label>
+            </div>
           </div>
 
-          {selectedGraduation && (
+          {graduation && (
             <div>
               <label htmlFor="course">Course:</label>
               <select id="course" value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
@@ -227,6 +247,18 @@ function App() {
           )}
 
           {selectedCourse && (
+            <div>
+              <label htmlFor="semester">Semester:</label>
+              <select id="semester" value={selectedSemester} onChange={handleSemesterChange} className='bg-transparent border border-slate-400 rounded-lg'>
+                <option value="" className='text-black'>--Select Semester--</option>
+                {semesters.map((semester, index) => (
+                  <option key={index} value={semester} className='text-black'>{semester}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {selectedSemester && (
             <div>
               <label htmlFor="teachers">Teachers:</label>
               <select id="teachers" value={selectedTeacher} onChange={handleTeacherChange} className='bg-transparent border border-slate-400 rounded-lg'>
