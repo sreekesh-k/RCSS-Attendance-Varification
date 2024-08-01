@@ -22,9 +22,9 @@ const createCourse = async (req, res) => {
 };
 
 const getCourseById = async (req, res) => {
-    const { id } = req.params;
+    const { level } = req.params;
     try {
-        const course = await prisma.course.findUnique({ where: { cid: Number(id) } });
+        const course = await prisma.course.findMany({ where: { level: String(level) } });
         if (course) {
             res.json(course);
         } else {
