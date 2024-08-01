@@ -7,3 +7,5 @@ router.post('/', subjectController.createSubject);
 router.get('/:id', subjectController.getSubjectById);
 router.put('/:id', subjectController.updateSubject);
 router.delete('/:id', subjectController.deleteSubject);
+
+module.exports = router;

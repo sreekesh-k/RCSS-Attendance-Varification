@@ -8,3 +8,6 @@ router.post('/', teacherSubjectController.createTeacherSubject);
 router.get('/:id',teacherSubjectController.getTeacherSubjectById);
 router.put('/:id', teacherSubjectController.updateTeacherSubject);
 router.delete('/:id',teacherSubjectController.deleteTeacherSubject);
+
+
+module.exports = router;

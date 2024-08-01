@@ -8,3 +8,5 @@ router.get('/:id', timeTableController.getTimeTableById);
 router.put('/:id', timeTableController.updateTimeTable);
 router.post('/', timeTableController.createTimeTable);
 router.delete('/:id', timeTableController.deleteTimeTable);
+
+module.exports = router;
