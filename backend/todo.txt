@@ -1,0 +1,22 @@
+1. npm install dotenv
+2. you will see a .env file in backend folder if not create a file name .env
+3. inside the file add this->  DATABASE_URL="mysql://root:@localhost:3306/rcss"
+4. npx prisma generate
+5. npx prisma migrate dev --name init
+6. goto myPhpAdmin and insert some datas 
+7. run backend server and using thunderClient send GET request to http://localhost:5000/college and see if data is retrieved
+8. Itrem cheythit work cheythillengi enne vilicho 😁
+
+
+[NO NEED TO DO THESE STEPS JUST TO SHOW PRISMA INSTALLATION]:
+1. npm install prisma --save-dev
+2. npx prisma init
+    ->edit the .env file and set ur DATABASE_URL
+    ->edit the schema.prisma -> 'privider' :: Create your models here
+3. npx prisma db pull
+    -> not mandatory
+4. npm install @prisma/client
+5. npx prisma generate
+    -> once the models are created generate the prisma
+6. npx prisma migrate dev -name init
+    -> check you database
