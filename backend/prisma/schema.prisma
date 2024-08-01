@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,63 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Course {
-  cid            Int              @id @default(autoincrement())
-  cname          String           @db.VarChar(50)
-  level          Level
-  CourseSubjects CourseSubjects[]
-  Timetable      Timetable[]
+model course {
+  cid   Int          @id @default(autoincrement())
+  cname String       @db.VarChar(50)
+  level course_level
 }
 
-enum Level {
-  UG
-  PG
+model coursesubjects {
+  csid Int @id @default(autoincrement())
+  cid  Int
+  sid  Int
+
+  @@index([cid], map: "CourseSubjects_cid_fkey")
+  @@index([sid], map: "CourseSubjects_sid_fkey")
 }
 
-model Subjects {
-  sid                   Int                     @id @default(autoincrement())
-  sname                 String                  @db.VarChar(50)
-  CourseSubjects        CourseSubjects[]
-  TeacherTeachesSubject TeacherTeachesSubject[]
+model subjects {
+  sid   Int    @id @default(autoincrement())
+  sname String @db.VarChar(50)
 }
 
-model CourseSubjects {
-  csid     Int      @id @default(autoincrement())
-  cid      Int
-  sid      Int
-  Course   Course   @relation(fields: [cid], references: [cid], onDelete: Cascade)
-  Subjects Subjects @relation(fields: [sid], references: [sid], onDelete: Cascade)
+model teacher {
+  tid   Int    @id @default(autoincrement())
+  tname String @db.VarChar(50)
 }
 
-model Teacher {
-  tid                   Int                     @id @default(autoincrement())
-  tname                 String                  @db.VarChar(50)
-  TeacherTeachesSubject TeacherTeachesSubject[]
+model teacherteachessubject {
+  ttsid Int @id @default(autoincrement())
+  tid   Int
+  sid   Int
+
+  @@index([sid], map: "TeacherTeachesSubject_sid_fkey")
+  @@index([tid], map: "TeacherTeachesSubject_tid_fkey")
 }
 
-model TeacherTeachesSubject {
-  ttsid     Int         @id @default(autoincrement())
-  tid       Int
-  sid       Int
-  Teacher   Teacher     @relation(fields: [tid], references: [tid], onDelete: Cascade)
-  Subjects  Subjects    @relation(fields: [sid], references: [sid], onDelete: Cascade)
-  Timetable Timetable[]
-}
-
-model TimeSlots {
-  tsid      Int         @id @default(autoincrement())
+model timeslots {
+  tsid      Int      @id @default(autoincrement())
   starttime DateTime
   endtime   DateTime
-  Timetable Timetable[]
 }
 
-model Timetable {
-  ttid                  Int                   @id @default(autoincrement())
-  day                   String                @db.VarChar(10)
-  cid                   Int
-  tsid                  Int
-  ttsid                 Int
-  Course                Course                @relation(fields: [cid], references: [cid], onDelete: Cascade)
-  TimeSlots             TimeSlots             @relation(fields: [tsid], references: [tsid], onDelete: Cascade)
-  TeacherTeachesSubject TeacherTeachesSubject @relation(fields: [ttsid], references: [ttsid], onDelete: Cascade)
+model timetable {
+  ttid  Int    @id @default(autoincrement())
+  day   String @db.VarChar(10)
+  cid   Int
+  tsid  Int
+  ttsid Int
+
+  @@index([cid], map: "Timetable_cid_fkey")
+  @@index([tsid], map: "Timetable_tsid_fkey")
+  @@index([ttsid], map: "Timetable_ttsid_fkey")
+}
+
+enum course_level {
+  UG
+  PG
 }
