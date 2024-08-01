@@ -3,7 +3,7 @@ const router = express.Router();
 const timeTableController = require('../controllers/timeTableController')
 
 
-router.get('/', timeTableController.getAll);
+router.get('/', timeTableController.getAllTimeTables);
 router.get('/:id', timeTableController.getTimeTableById);
 router.put('/:id', timeTableController.updateTimeTable);
 router.post('/', timeTableController.createTimeTable);
