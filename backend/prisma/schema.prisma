@@ -42,9 +42,9 @@ model teacherteachessubject {
 }
 
 model timeslots {
-  tsid      Int      @id @default(autoincrement())
-  starttime DateTime
-  endtime   DateTime
+  tsid      Int    @id @default(autoincrement())
+  starttime String @db.VarChar(10)
+  endtime   String @db.VarChar(10)
 }
 
 model timetable {
