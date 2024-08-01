@@ -2,7 +2,7 @@
 2. you will see a .env file in backend folder if not create a file name .env
 3. inside the file add this->  DATABASE_URL="mysql://root:@localhost:3306/rcss"
 4. npx prisma generate
-5. npx prisma migrate dev -name init
+5. npx prisma migrate dev --name init
 6. goto myPhpAdmin and insert some datas 
 7. run backend server and using thunderClient send GET request to http://localhost:5000/college and see if data is retrieved
 8. Itrem cheythit work cheythillengi enne vilicho 😁
