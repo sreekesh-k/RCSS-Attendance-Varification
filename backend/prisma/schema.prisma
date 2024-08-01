@@ -13,12 +13,62 @@ datasource db {
 }
 
 model Course {
-  cid   Int    @id @default(autoincrement())
-  cname String
-  level Level
+  cid            Int              @id @default(autoincrement())
+  cname          String           @db.VarChar(50)
+  level          Level
+  CourseSubjects CourseSubjects[]
+  Timetable      Timetable[]
 }
 
 enum Level {
   UG
   PG
+}
+
+model Subjects {
+  sid                   Int                     @id @default(autoincrement())
+  sname                 String                  @db.VarChar(50)
+  CourseSubjects        CourseSubjects[]
+  TeacherTeachesSubject TeacherTeachesSubject[]
+}
+
+model CourseSubjects {
+  csid     Int      @id @default(autoincrement())
+  cid      Int
+  sid      Int
+  Course   Course   @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  Subjects Subjects @relation(fields: [sid], references: [sid], onDelete: Cascade)
+}
+
+model Teacher {
+  tid                   Int                     @id @default(autoincrement())
+  tname                 String                  @db.VarChar(50)
+  TeacherTeachesSubject TeacherTeachesSubject[]
+}
+
+model TeacherTeachesSubject {
+  ttsid     Int         @id @default(autoincrement())
+  tid       Int
+  sid       Int
+  Teacher   Teacher     @relation(fields: [tid], references: [tid], onDelete: Cascade)
+  Subjects  Subjects    @relation(fields: [sid], references: [sid], onDelete: Cascade)
+  Timetable Timetable[]
+}
+
+model TimeSlots {
+  tsid      Int         @id @default(autoincrement())
+  starttime DateTime
+  endtime   DateTime
+  Timetable Timetable[]
+}
+
+model Timetable {
+  ttid                  Int                   @id @default(autoincrement())
+  day                   String                @db.VarChar(10)
+  cid                   Int
+  tsid                  Int
+  ttsid                 Int
+  Course                Course                @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  TimeSlots             TimeSlots             @relation(fields: [tsid], references: [tsid], onDelete: Cascade)
+  TeacherTeachesSubject TeacherTeachesSubject @relation(fields: [ttsid], references: [ttsid], onDelete: Cascade)
 }
