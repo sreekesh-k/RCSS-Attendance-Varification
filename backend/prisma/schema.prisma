@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model course {
+  cid   Int          @id @default(autoincrement())
+  cname String       @db.VarChar(50)
+  level course_level
+}
+
+model coursesubjects {
+  csid Int @id @default(autoincrement())
+  cid  Int
+  sid  Int
+
+  @@index([cid], map: "CourseSubjects_cid_fkey")
+  @@index([sid], map: "CourseSubjects_sid_fkey")
+}
+
+model subjects {
+  sid   Int    @id @default(autoincrement())
+  sname String @db.VarChar(50)
+}
+
+model teacher {
+  tid   Int    @id @default(autoincrement())
+  tname String @db.VarChar(50)
+}
+
+model teacherteachessubject {
+  ttsid Int @id @default(autoincrement())
+  tid   Int
+  sid   Int
+
+  @@index([sid], map: "TeacherTeachesSubject_sid_fkey")
+  @@index([tid], map: "TeacherTeachesSubject_tid_fkey")
+}
+
+model timeslots {
+  tsid      Int    @id @default(autoincrement())
+  starttime String @db.VarChar(10)
+  endtime   String @db.VarChar(10)
+}
+
+model timetable {
+  ttid  Int    @id @default(autoincrement())
+  day   String @db.VarChar(10)
+  cid   Int
+  tsid  Int
+  ttsid Int
+
+  @@index([cid], map: "Timetable_cid_fkey")
+  @@index([tsid], map: "Timetable_tsid_fkey")
+  @@index([ttsid], map: "Timetable_ttsid_fkey")
+}
+
+enum course_level {
+  UG
+  PG
+}
