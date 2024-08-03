@@ -1,11 +1,12 @@
 const prisma = require('../prismaClient');
 
 const getAllCourses = async (req, res) => {
-    const { level } = req.query;
+    const { level, sem } = req.query;
     try {
         const courses = await prisma.courses.findMany({
-            where:{
-                level:level.toUpperCase()
+            where: {
+                level: level.toUpperCase(),
+                sem: parseInt(sem)
             }
         });
         res.json(courses);

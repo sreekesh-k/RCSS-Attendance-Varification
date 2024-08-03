@@ -14,8 +14,9 @@ const getAllTimeTables = async (req, res) => {
                 day: day.toUpperCase(),
             },
             include: {
-                TimeSlots: true,
-                Teachers: true
+                timesots: true,
+                teachers: true,
+                subjects: true,
             },
         });
         res.json(timetable)

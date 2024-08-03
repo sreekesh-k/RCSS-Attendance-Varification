@@ -17,10 +17,11 @@ model Courses {
 }
 
 model Subjects {
-  sid    Int     @id @default(autoincrement())
-  cid    Int
-  sname  String  @db.VarChar(100)
-  course Courses @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  sid        Int          @id @default(autoincrement())
+  cid        Int
+  sname      String       @db.VarChar(100)
+  course     Courses      @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  timetables TimeTables[]
 }
 
 model Teachers {
@@ -42,10 +43,12 @@ model TimeTables {
   cid  Int
   tsid Int
   tid  Int
+  sid  Int
 
-  Courses   Courses   @relation(fields: [cid], references: [cid])
-  Teachers  Teachers  @relation(fields: [tid], references: [tid])
-  TimeSlots TimeSlots @relation(fields: [tsid], references: [tsid])
+  subjects Subjects  @relation(fields: [sid], references: [sid])
+  courses  Courses   @relation(fields: [cid], references: [cid])
+  teachers Teachers  @relation(fields: [tid], references: [tid])
+  timesots TimeSlots @relation(fields: [tsid], references: [tsid])
 }
 
 enum CourseLevel {
