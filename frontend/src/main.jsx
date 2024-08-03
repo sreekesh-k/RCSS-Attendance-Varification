@@ -6,7 +6,6 @@ import Crud from './Crud.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Crud/>
+    <Crud />
   </React.StrictMode>,
 )

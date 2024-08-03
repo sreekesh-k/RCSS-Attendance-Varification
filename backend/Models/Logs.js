@@ -5,7 +5,7 @@ const logSchema = new Schema({
   date: { type: Date, required: true },
   courseName: { type: String, required: true },
   teacherName: { type: String, required: true },
-  students: [{ type: String, required: true }],
+  students: [{ type: String, required: false }],
 }, {
   timestamps: true,
 });
