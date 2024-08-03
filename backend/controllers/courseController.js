@@ -1,8 +1,13 @@
 const prisma = require('../prismaClient');
 
 const getAllCourses = async (req, res) => {
+    const { level } = req.query;
     try {
-        const courses = await prisma.course.findMany();
+        const courses = await prisma.courses.findMany({
+            where:{
+                level:level.toUpperCase()
+            }
+        });
         res.json(courses);
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching courses.' });

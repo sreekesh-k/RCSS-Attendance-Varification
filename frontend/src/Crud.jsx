@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
 function Crud() {
-    const [level, setLevel] = useState('');
+    const [level, setLevel] = useState();
     const [courses, setCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState('');
-    const [timeslots, setTimeslots] = useState([]);
-    const [selectedTimeslot, setSelectedTimeslot] = useState('');
+    const [timeSlots, setTimeslots] = useState([]);
+    const [selectedTimeslot, setselectedTimeslot] = useState('')
     const [teachers, setTeachers] = useState([]);
     const [day, setDay] = useState('Monday');
+    const [selectedDate, setSelectedDate] = useState('');
     const [error, setError] = useState(null);
+    const handleDateChange = (event) => {
+        const date = new Date(event.target.value);
+        const options = { weekday: 'long' };
+        const dayOfWeek = new Intl.DateTimeFormat('en-US', options).format(date);
+        setDay(dayOfWeek);
+        setSelectedDate(event.target.value);
+    };
     useEffect(() => {
         if (level) {
-            fetch(`http://localhost:5000/college/courses/${level}`)
+            fetch(`http://localhost:5000/college/courses?level=${level}`)
                 .then(response => response.json())
                 .then((data) => { setCourses(data) })
                 .catch(error => setError('Error fetching courses: ' + error.message));
@@ -23,30 +31,36 @@ function Crud() {
         if (selectedCourse) {
             fetch(`http://localhost:5000/college/timetables?cid=${selectedCourse}&day=${day}`)
                 .then(response => response.json())
-                .then(data => setTimeslots(data))
+                .then(data => {
+                    const ts = data.map(tt => tt.TimeSlots)
+                    setTimeslots(ts)
+                    const tr = data.map(tt => tt.Teachers.tname)
+                    setTeachers(tr)
+                }
+                )
                 .catch(error => setError('Error fetching timeslots: ' + error.message));
         }
     }, [selectedCourse, day]);
 
-
-    useEffect(() => {
-        if (selectedTimeslot) {
-            fetch(`http://localhost:5000/college/timetables?timeslot=${selectedTimeslot}`)
-                .then(response => response.json())
-                .then(data => setTeachers(data))
-                .catch(error => setError('Error fetching teachers: ' + error.message));
-        }
-    }, [selectedTimeslot]);
-
     return (
         <div className=" text-white grid place-items-center">
+            <div>
+                <label htmlFor="date">Select Date:</label>
+                <input
+                    type="date"
+                    id="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                />
+                <p>Selected Day: {day}</p>
+            </div>
             <div>
                 <label>
                     <input
                         type="radio"
                         name="level"
                         value="UG"
-                        checked={level === 'UG'}
+
                         onChange={() => setLevel('UG')}
                     />
                     UG
@@ -56,49 +70,36 @@ function Crud() {
                         type="radio"
                         name="level"
                         value="PG"
-                        checked={level === 'PG'}
+
                         onChange={() => setLevel('PG')}
                     />
                     PG
                 </label>
             </div>
+            <div className=' text-black'>
+                <label htmlFor="course">Course:</label>
+                <select id="course" disabled={!level} value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
+                    <option value="">--Select Course--</option>
+                    {courses.map(course => (
+                        <option key={course.cid} value={course.cid}>{course.cname}</option>
+                    ))}
+                </select>
+            </div>
 
-            {level && (
-                <div className=' text-black'>
-                    <label htmlFor="course">Course:</label>
-                    <select id="course" value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
-                        <option value="">--Select Course--</option>
-                        {courses.map(course => (
-                            <option key={course.cid} value={course.cid}>{course.cname}</option>
+            <div className='text-black'>
+                <label htmlFor="timeslot">Timeslot:</label>
+                <select id="timeslot" disabled={!selectedCourse} value={selectedTimeslot} onChange={(e) => setselectedTimeslot(e.target.value)}>
+                    <option value="">--Select Timeslot--</option>
+                    {
+                        timeSlots.map((timeslot, index) => (
+                            <option key={timeslot.tsid} value={index}>{timeslot.starttime} - {timeslot.endtime}</option>
                         ))}
-                    </select>
-                </div>
-            )}
-
-            {selectedCourse && (
-                <div className='text-black'>
-                    <label htmlFor="timeslot">Timeslot:</label>
-                    <select id="timeslot" value={selectedTimeslot} onChange={(e) => setSelectedTimeslot(e.target.value)}>
-                        <option value="">--Select Timeslot--</option>
-                        {timeslots.map(timeslot => (
-                            <option key={timeslot.tsid} value={timeslot.tsid}>{timeslot.starttime} - {timeslot.endtime}</option>
-                        ))}
-                    </select>
-                </div>
-            )}
-
-            {selectedTimeslot && (
-                <div>
-                    <label htmlFor="teacher">Teacher:</label>
-                    <select id="teacher">
-                        <option value="">--Select Teacher--</option>
-                        {teachers.map(teacher => (
-                            <option key={teacher.tid} value={teacher.tid}>{teacher.tname}</option>
-                        ))}
-                    </select>
-                </div>
-            )}
-
+                </select>
+            </div>
+            <div className='text-black'>
+                <label htmlFor="teacher">Teacher</label>
+                <input type="text" name="teacher" id="teacher" disabled={!selectedTimeslot} defaultValue={teachers[selectedTimeslot]} />
+            </div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
