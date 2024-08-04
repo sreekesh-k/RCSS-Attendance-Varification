@@ -6,10 +6,10 @@ const logSchema = new Schema({
   start_time: { type: String, required: true },
   end_time: { type: String, required: true },
   programme: { type: String, required: true },
-  sem: { type: Number, required: true }, 
+  sem: { type: Number, required: true, min: 1 },
   subject: { type: String, required: true },
   faculty_Name: { type: String, required: true },
-  total_no_of_absenties: { type: Number, required: true }, 
+  total_no_of_absenties: { type: Number, default: 0, min: 0 },
   students: [{ type: String }],
 }, {
   timestamps: true,

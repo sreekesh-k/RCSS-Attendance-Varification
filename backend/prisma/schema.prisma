@@ -48,7 +48,7 @@ model TimeTables {
   subjects Subjects  @relation(fields: [sid], references: [sid])
   courses  Courses   @relation(fields: [cid], references: [cid])
   teachers Teachers  @relation(fields: [tid], references: [tid])
-  timesots TimeSlots @relation(fields: [tsid], references: [tsid])
+  timeslots TimeSlots @relation(fields: [tsid], references: [tsid])
 }
 
 enum CourseLevel {
