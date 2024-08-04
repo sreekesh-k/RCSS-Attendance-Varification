@@ -33,7 +33,7 @@ function Download() {
         setShowConfirmation(false);
     };
     return (<>
-        <header className='w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-black bg-opacity-35'>
+        <footer className='w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-primary'>
             <div className='relative w-fit'>
                 <label htmlFor="from">From :</label>
                 <input
@@ -41,7 +41,7 @@ function Download() {
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
+                    className='bg-transparent border border-mybl rounded-lg px-2 w-fit'
                 />
             </div>
             <div className='relative w-fit'>
@@ -51,11 +51,11 @@ function Download() {
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
+                    className='bg-transparent border border-mybl rounded-lg px-2 w-fit'
                 />
             </div>
             <button type='button' className='bg-mybl px-4 py-2 rounded-lg block' onClick={handleDownloadLogs}>Excel</button>
-        </header>
+        </footer>
         {showConfirmation && (
             <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10'>
                 <div className='bg-white p-5 rounded-lg text-black'>
