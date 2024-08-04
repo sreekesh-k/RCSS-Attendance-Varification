@@ -1,14 +1,31 @@
 const prisma = require('../prismaClient');
 
 const getAllTimeTables = async (req, res) => {
+    const { cid, day } = req.query;
+
+    if (!cid || !day) {
+        return res.status(400).json({ error: 'cid and day are required' });
+    }
+
     try {
-        const timetables = await prisma.timetable.findMany();
-        res.json(timetables);
+        const timetable = await prisma.timeTables.findMany({
+            where: {
+                cid: parseInt(cid),
+                day: day.toUpperCase(),
+            },
+            include: {
+                timeslots:true,
+                teachers: true,
+                subjects: true,
+            },
+        });
+        res.json(timetable)
+
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while fetching timetables.' });
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while fetching the timetable' });
     }
 }
-
 const createTimeTable = async (req, res) => {
     const { day, cid, tsid, ttsid } = req.body;
     try {

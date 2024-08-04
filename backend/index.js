@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const coursesRouter = require('./routes/courses');
 const collegeRouter = require('./routes/college');
 const logsRouter =  require('./routes/logs')
 
@@ -21,8 +20,7 @@ connection.once('open', () => {
 });
 
 
-app.use('/college', collegeRouter); //todo -> create backend API (EDIT THE routes/college.js)
-app.use('/courses', coursesRouter);
+app.use('/college', collegeRouter);
 app.use('/logs',logsRouter);
 
 app.listen(port, () => {

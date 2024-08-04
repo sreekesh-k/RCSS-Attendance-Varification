@@ -1,8 +1,14 @@
 const prisma = require('../prismaClient');
 
 const getAllCourses = async (req, res) => {
+    const { level, sem } = req.query;
     try {
-        const courses = await prisma.course.findMany();
+        const courses = await prisma.courses.findMany({
+            where: {
+                level: level.toUpperCase(),
+                sem: parseInt(sem)
+            }
+        });
         res.json(courses);
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching courses.' });
@@ -22,9 +28,9 @@ const createCourse = async (req, res) => {
 };
 
 const getCourseById = async (req, res) => {
-    const { id } = req.params;
+    const { level } = req.params;
     try {
-        const course = await prisma.course.findUnique({ where: { cid: Number(id) } });
+        const course = await prisma.course.findMany({ where: { level: String(level) } });
         if (course) {
             res.json(course);
         } else {
