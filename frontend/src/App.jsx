@@ -151,11 +151,6 @@ function Crud() {
             className='bg-transparent border border-slate-400 rounded-lg px-1'
           />
         </div>
-        {/* {selectedTeacher && selectedSubject && (
-                    <> < h1 > {selectedSubject}</h1>
-                        < h1 > {selectedTeacher}</h1>
-                        < h1 > {startTime}</h1>
-                        < h1 > {endTime}</h1></>)} */}
         <div className=' w-full grid grid-cols-2'>
           <label>
             <input
