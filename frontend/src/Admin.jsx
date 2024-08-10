@@ -1,12 +1,14 @@
-import React from "react";
-import Sample from "./Components/admin/Sample";
+import React, { useState } from "react";
+import CourseCreator from "./Components/admin/CourseCreator";
+import TeacherCreator from "./Components/admin/TeacherCreator";
 
 function Admin() {
   return (
     <>
-      <main className="w-full grid place-items-center">
-        <h1>HELLO ADMIN</h1>
-        <Sample />
+      <main className="px-5">
+        <CourseCreator />
+        <TeacherCreator />
+        
       </main>
     </>
   );
