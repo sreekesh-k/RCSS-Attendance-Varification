@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Download from './Components/Download';
-function Crud() {
+function App() {
   const [day, setDay] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
@@ -236,4 +236,4 @@ function Crud() {
   );
 }
 
-export default Crud;
+export default App;
