@@ -8,7 +8,9 @@ router.post('/', async (req, res) => {
     const { date, start_time, end_time, programme, sem, subject, faculty_Name, total_no_of_absenties, students } = req.body;
 
 
-    if (!date || !start_time || !end_time || !programme || !sem || !subject || !faculty_Name || !total_no_of_absenties || !students) {
+    if (!date || !start_time || !end_time || !programme || !sem || !subject || !faculty_Name) {
+      const data = req.body;
+      console.log(data)
       return res.status(400).json({ message: 'All fields are required' });
     }
     const newLog = new Log({
@@ -22,7 +24,6 @@ router.post('/', async (req, res) => {
       total_no_of_absenties,
       students
     });
-
 
     await newLog.save();
     res.status(201).json(newLog);

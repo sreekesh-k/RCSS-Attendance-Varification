@@ -1,60 +1,124 @@
 import React, { useState, useEffect } from 'react';
-import * as XLSX from 'xlsx';
-
+import Download from './Components/Download';
 function App() {
-  const [data, setData] = useState([]);
+  const [day, setDay] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const [level, setLevel] = useState();
+  const [sem, setSem] = useState('');
+
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
+
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('')
+
+
+
+
   const [teachers, setTeachers] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState('');
-  const [selectedStudents, setSelectedStudents] = useState([]);
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]);
-  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
+  const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState('');
   useEffect(() => {
-    fetch('http://localhost:5000/courses')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setData(data);
-        setCourses([...new Set(data.map(item => item.name))]);
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
+    if (selectedTimeSlot) {
+      setSelectedTeacher(teachers[selectedTimeSlot]);
+      setSelectedSubject(subjects[selectedTimeSlot]);
+      setStartTime(timeSlots[selectedTimeSlot].starttime);
+      setEndTime(timeSlots[selectedTimeSlot].endtime);
+    }
+  }, [selectedTimeSlot, teachers, subjects]);
 
-  const handleCourseChange = (event) => {
-    const course = event.target.value;
-    setSelectedCourse(course);
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [count, setCount] = useState(0);
 
-    const courseData = data.filter(item => item.name === course);
-    setTeachers([...new Set(courseData.flatMap(item => item.teacher))]);
-  };
-
-  const handleTeacherChange = (event) => {
-    setSelectedTeacher(event.target.value);
-  };
+  const [error, setError] = useState(null);
 
   const handleDateChange = (event) => {
-    setDate(event.target.value);
+    const date = new Date(event.target.value);
+    const options = { weekday: 'long' };
+    const dayOfWeek = new Intl.DateTimeFormat('en-US', options).format(date);
+    setDay(dayOfWeek);
+    setSelectedDate(event.target.value);
+  };
+
+  useEffect(() => {
+    if (level && sem) {
+      fetch(`http://localhost:5000/college/courses?level=${level}&sem=${sem}`)
+        .then(response => response.json())
+        .then((data) => { setCourses(data) })
+        .catch(error => setError('Error fetching courses: ' + error.message));
+    }
+  }, [level, sem]);
+
+  useEffect(() => {
+    if (selectedCourse) {
+      fetch(`http://localhost:5000/college/timetables?cid=${selectedCourse}&day=${day}`)
+        .then(response => response.json())
+        .then(data => {
+          const ts = data.map(tt => tt.timeslots)
+          setTimeSlots(ts)
+          const tr = data.map(tt => tt.teachers.tname)
+          setTeachers(tr)
+          const sb = data.map(tt => tt.subjects.sname)
+          setSubjects(sb)
+        }
+        )
+        .catch(error => setError('Error fetching timeslots: ' + error.message));
+    }
+  }, [selectedCourse, day]);
+
+
+  const renderCheckboxes = () => {
+    let checkboxes = [];
+    for (let i = 1; i <= 75; i++) {
+      checkboxes.push(
+        <li key={i} className='relative flex items-center'>
+          <label
+            htmlFor={`checkbox-${i}`}
+            className={`flex items-center justify-center border border-mybl rounded-md cursor-pointer p-3
+                ${selectedStudents.includes(i.toString()) ? 'bg-mybl text-white' : 'hover:bg-gray-200'} ${selectedTimeSlot ? '' : 'bg-slate-500 hover:bg-slate-500'}`}
+          >
+            <input
+              id={`checkbox-${i}`}
+              type="checkbox"
+              value={i}
+              disabled={!selectedTimeSlot}
+              onChange={handleStudentChange}
+              checked={selectedStudents.includes(i.toString())}
+              className='hidden'
+            />
+            {i.toString().padStart(2, '0')}
+          </label>
+        </li>
+      );
+    }
+    return checkboxes;
   };
 
   const handleStudentChange = (event) => {
     const student = event.target.value;
     if (event.target.checked) {
       setSelectedStudents([...selectedStudents, student]);
+      setCount(count + 1)
     } else {
       setSelectedStudents(selectedStudents.filter(s => s !== student));
+      setCount(count - 1)
     }
   };
-
   const handleSubmit = () => {
     const logEntry = {
-      date: date,
-      courseName: selectedCourse,
-      teacherName: selectedTeacher,
-      students: selectedStudents,
+      date: selectedDate,
+      start_time: startTime,
+      end_time: endTime,
+      programme: selectedCourse,
+      sem: sem,
+      subject: selectedSubject,
+      faculty_Name: selectedTeacher,
+      total_no_of_absenties: count,
+      students: selectedStudents
     };
 
     fetch('http://localhost:5000/logs', {
@@ -68,155 +132,107 @@ function App() {
       .then(data => {
         window.alert("Success");
         console.log('Log entry created:', data);
-        setSelectedCourse('');
-        setSelectedTeacher('');
-        setSelectedStudents([]);
-        setDate(new Date().toISOString().split('T')[0]);
+        window.location.reload();
       })
       .catch(error => { window.alert("Error"); console.error('Error creating log entry:', error) });
   };
 
-  const handleDownloadLogs = () => {
-    setShowConfirmation(true);
-  };
-
-  const confirmDownload = () => {
-    fetch(`http://localhost:5000/logs/all?startDate=${startDate}&endDate=${endDate}`)
-      .then(response => response.json())
-      .then(logs => {
-        const processedLogs = logs.map(log => ({
-          ...log,
-          students: log.students.join(', '),
-        }));
-
-        const worksheet = XLSX.utils.json_to_sheet(processedLogs);
-        const workbook = XLSX.utils.book_new();
-
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Logs');
-        XLSX.writeFile(workbook, 'logs.xlsx');
-        setShowConfirmation(false);
-      })
-      .catch(error => console.error('Error fetching logs:', error));
-  };
-
-  const handleCancel = () => {
-    setShowConfirmation(false);
-  };
-
-  const renderCheckboxes = () => {
-    let checkboxes = [];
-    for (let i = 1; i <= 72; i++) {
-      checkboxes.push(
-        <li key={i} className='relative flex items-center'>
-          <label
-            htmlFor={`checkbox-${i}`}
-            className={`flex items-center justify-center w-10 h-10 border border-slate-500 rounded-md cursor-pointer 
-            ${selectedStudents.includes(i.toString()) ? 'bg-mybl text-white' : 'bg-transparent hover:bg-gray-200'}`}
-          >
-            <input
-              id={`checkbox-${i}`}
-              type="checkbox"
-              value={i}
-              onChange={handleStudentChange}
-              checked={selectedStudents.includes(i.toString())}
-              className='absolute opacity-0 w-0 h-0'
-            />
-            {i.toString().padStart(2, '0')}
-          </label>
-        </li>
-      );
-    }
-    return checkboxes;
-  };
 
   return (
     <>
-      <header className='w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-black bg-opacity-35'>
-        <div className='relative w-fit'>
-          <label htmlFor="from">From :</label>
-          <input
-            id='from'
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
-          />
-        </div>
-        <div className='relative w-fit'>
-          <label htmlFor="to">To :</label>
-          <input
-            id='to'
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className='bg-transparent border border-slate-400 rounded-lg px-2 w-fit'
-          />
-        </div>
-        <button type='button' className='bg-mybl px-4 py-2 rounded-lg block' onClick={handleDownloadLogs}>Excel</button>
-      </header>
-      {showConfirmation && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
-          <div className='bg-white p-5 rounded-lg text-black'>
-            <h3 className='mb-4'>Confirm Download</h3>
-            <p>Are you sure you want to download logs between {startDate} and {endDate}?</p>
-            <div className='mt-4 flex justify-end gap-2'>
-              <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={confirmDownload}>Confirm</button>
-              <button type='button' className='bg-red-500 px-4 py-2 rounded-lg' onClick={handleCancel}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
-      <main className='w-full mt-10 relative grid place-items-center'>
-        <div className='grid place-items-start gap-5 text-white p-10 rounded-md min-h-[25%]'>
-          <div>
-            <label htmlFor="date">Date:</label>
-            <input
-              id='date'
-              type="date"
-              value={date}
-              onChange={handleDateChange}
-              className='bg-transparent border border-slate-400 rounded-lg px-1'
-            />
-          </div>
-          <div>
-            <label htmlFor="course">Course:</label>
-            <select id="course" value={selectedCourse} onChange={handleCourseChange} className='bg-transparent border border-slate-400 rounded-lg'>
-              <option value="" className='text-black'>--Select Course--</option>
-              {courses.map((course, index) => (
-                <option key={index} value={course} className='text-black'>{course}</option>
-              ))}
-            </select>
-          </div>
 
-          {selectedCourse && (
-            <div>
-              <label htmlFor="teachers">Teachers:</label>
-              <select id="teachers" value={selectedTeacher} onChange={handleTeacherChange} className='bg-transparent border border-slate-400 rounded-lg'>
-                <option value="" className='text-black'>--Select Teacher--</option>
-                {teachers.map((teacher, index) => (
-                  <option key={index} value={teacher} className='text-black'>{teacher}</option>
+      <main className='relative w-full min-h-[88svh] grid place-items-center overflow-hidden py-5'>
+        <div className='absolute h-full w-full left-[-75%] top-[-20%] bg-mybl rounded-full z-[-10] bg-opacity-10'></div>
+        <div className='absolute h-full w-full right-[-75%] bottom-[-50%] bg-mybl rounded-full z-[-10] bg-opacity-10'></div>
+        <div className=" grid w-11/12 h-full place-items-center grid-rows-2 md:grid-cols-2 md:grid-rows-1 text-black p-10 min-h-[25%] border-2 border-mybl rounded-xl">
+          <div className=' w-full h-full flex flex-col items-center justify-between border-b-2 md:border-b-0 border-b-mybl md:border-r-2 md:border-r-mybl p-5'>
+            <div className='flex gap-5 w-full'>
+              <label htmlFor="date" className=' font-bold'>Date:</label>
+              <input
+                type="date"
+                id="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+                className='bg-transparent border border-mybl rounded-lg px-1 w-full text-center'
+              />
+            </div>
+            <div className=' w-full flex gap-5'>
+              <div className=' font-bold'>Level:</div>
+              <label>
+                <input
+                  type="radio"
+                  name="level"
+                  value="UG"
+                  disabled={!day}
+                  onChange={() => setLevel('UG')}
+                />
+                UG
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="level"
+                  value="PG"
+                  disabled={!day}
+                  onChange={() => setLevel('PG')}
+                />
+                PG
+              </label>
+            </div>
+            <div className='flex gap-5 w-full'>
+              <label htmlFor="sem" className=' font-bold'>Sem:</label>
+              <select id="sem" disabled={!level} value={sem} onChange={(e) => setSem(e.target.value)} className='bg-transparent border border-mybl rounded-lg px-1 w-full text-center'>
+                <option value="" >--Select Sem--</option>
+                {[...Array(6)].map((_, i) => (
+                  <option key={i + 1} value={i + 1} className='text-black'>{i + 1}</option>
                 ))}
               </select>
             </div>
-          )}
+            <div className='flex gap-5 w-full'>
+              <label htmlFor="course" className=' font-bold'>Course:</label>
+              <select id="course" disabled={!sem} value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className='bg-transparent border border-mybl rounded-lg px-1 w-full text-center'>
+                <option value="" className='text-black'>--Select Course--</option>
+                {courses.map(course => (
+                  <option key={course.cid} value={course.cid} className='text-black'>{course.cname}</option>
+                ))}
+              </select>
+            </div>
 
-          {selectedCourse && selectedTeacher && (
+            <div className='flex gap-5 w-full'>
+              <label htmlFor="timeslot" className=' font-bold'>Timeslot:</label>
+              <select id="timeslot" disabled={!selectedCourse} value={selectedTimeSlot} onChange={(e) => setSelectedTimeSlot(e.target.value)} className='bg-transparent border border-mybl rounded-lg px-1 w-full text-center'>
+                <option value="" className='text-black'>--Select Timeslot--</option>
+                {
+                  timeSlots.map((timeslot, index) => (
+                    <option key={timeslot.tsid} value={index} className='text-black'>{timeslot.starttime} - {timeslot.endtime}</option>
+                  ))}
+              </select>
+            </div>
+            <div className='flex gap-5 w-full'>
+              <label htmlFor="teacher" className=' font-bold'>Teacher</label>
+              <input type="text" name="teacher" id="teacher" disabled={!selectedTimeSlot} value={selectedTeacher} onChange={e => { setSelectedTeacher(e.target.value) }} className='bg-transparent border border-mybl rounded-lg px-1 w-full text-center' />
+            </div>
+            <div className='flex gap-5 w-full'>
+              <label htmlFor="subject" className=' font-bold'>Subject</label>
+              <input type="text" name="subject" id="subject" disabled={!selectedTimeSlot} value={selectedSubject} onChange={e => { setSelectedSubject(e.target.value) }} className='bg-transparent border border-mybl rounded-lg px-1 w-full text-center' />
+            </div>
+          </div>
+          <div className='w-full h-full flex flex-col p-5'>
+
             <div>
-              <h3>Students:</h3>
-              <ul className='grid grid-cols-9 gap-1'>
+              <h3 className=' font-bold'>Absenties RollNo:</h3>
+              <ul className='flex flex-wrap gap-2 mt-5'>
                 {renderCheckboxes()}
               </ul>
             </div>
-          )}
-
-          {selectedCourse && selectedTeacher && (
             <div>
-              <button type='button' className='bg-mybl px-4 py-2 rounded-lg' onClick={handleSubmit}>SUBMIT</button>
+              <button type='button' disabled={!selectedTimeSlot} className={`${selectedTimeSlot ? 'bg-mybl cursor-pointer' : 'bg-slate-500'} mt-5 px-4 py-2 rounded-lg w-full`} onClick={handleSubmit}>SUBMIT</button>
             </div>
-          )}
-        </div>
-      </main>
-    </>
+          </div>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div></main >
+      <Download /></>
+
   );
 }
 
