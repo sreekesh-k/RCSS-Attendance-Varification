@@ -42,7 +42,7 @@ function Download() {
   };
   return (
     <>
-      <footer className="w-full text-white flex justify-center items-center gap-5 mt-5 p-4 relative bg-primary">
+      <footer className="w-full flex justify-center items-center gap-5 mt-5 p-4 relative">
         <div className="relative w-fit">
           <label htmlFor="from">From :</label>
           <input
