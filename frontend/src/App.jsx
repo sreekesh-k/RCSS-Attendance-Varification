@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Download from "./Components/Download";
-import DateSelector from "./Components/DateSelector";
-import LevelSelector from "./Components/LevelSelector";
-import SemSelector from "./Components/SemSelector";
-import CourseSelector from "./Components/CourseSelector";
-import TimeslotSelector from "./Components/TimeslotSelector";
-import TeacherSubjects from "./Components/TeacherSubjects";
-import SubmitButton from "./Components/SubmitButton";
-import AbsentCheckboxList from "./Components/AbsentCheckboxList";
+import Download from "./Components/home/Download";
+import DateSelector from "./Components/home/DateSelector";
+import LevelSelector from "./Components/home/LevelSelector";
+import SemSelector from "./Components/home/SemSelector";
+import CourseSelector from "./Components/home/CourseSelector";
+import TimeslotSelector from "./Components/home/TimeslotSelector";
+import TeacherSubjects from "./Components/home/TeacherSubjects";
+import SubmitButton from "./Components/home/SubmitButton";
+import AbsentCheckboxList from "./Components/home/AbsentCheckboxList";
 
 function App() {
   const [day, setDay] = useState("");
