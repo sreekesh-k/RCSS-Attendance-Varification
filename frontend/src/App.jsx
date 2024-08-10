@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Download from "./Components/home/Download";
+import Download from "./Components/downloads/Download";
 import DateSelector from "./Components/home/DateSelector";
 import LevelSelector from "./Components/home/LevelSelector";
 import SemSelector from "./Components/home/SemSelector";
