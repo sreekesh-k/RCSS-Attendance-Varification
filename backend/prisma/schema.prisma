@@ -12,15 +12,12 @@ model Courses {
   cname      String       @db.VarChar(50)
   sem        Int          @default(1)
   level      CourseLevel
-  subjects   Subjects[]
   timetables TimeTables[]
 }
 
 model Subjects {
   sid        Int          @id @default(autoincrement())
-  cid        Int
   sname      String       @db.VarChar(100)
-  course     Courses      @relation(fields: [cid], references: [cid], onDelete: Cascade)
   timetables TimeTables[]
 }
 

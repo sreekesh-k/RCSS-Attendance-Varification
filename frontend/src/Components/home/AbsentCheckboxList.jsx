@@ -25,12 +25,12 @@ function AbsentCheckboxList({
         <li key={i} className="relative flex items-center">
           <label
             htmlFor={`checkbox-${i}`}
-            className={`flex items-center justify-center border border-mybl rounded-md cursor-pointer p-3
+            className={`flex items-center justify-center border border-mybl rounded-md cursor-pointer p-3 
                 ${
                   selectedStudents.includes(i.toString())
-                    ? "bg-mybl text-white bg-opacity-75"
+                    ? "bg-mybl  bg-opacity-75"
                     : "hover:bg-gray-200"
-                } ${selectedTimeSlot ? "" : "bg-slate-500 hover:bg-slate-500"}`}
+                } ${selectedTimeSlot ? "" : "bg-green-900 hover:bg-green-900 text-white"}`}
           >
             <input
               id={`checkbox-${i}`}

@@ -49,8 +49,10 @@ function SubmitButton({
         type="button"
         disabled={!selectedTimeSlot}
         className={`${
-          selectedTimeSlot ? "bg-mybl cursor-pointer  bg-opacity-75 text-white" : "bg-slate-500"
-        } mt-5 px-4 py-2 rounded-lg w-full`}
+          selectedTimeSlot
+            ? "bg-mybl cursor-pointer  bg-opacity-75"
+            : "bg-green-900"
+        } mt-5 px-4 py-2 rounded-lg w-full  text-white`}
         onClick={handleSubmit}
       >
         SUBMIT

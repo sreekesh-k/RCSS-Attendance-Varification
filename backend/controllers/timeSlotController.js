@@ -12,7 +12,10 @@ const createTimeSlot = async (req, res) => {
     const { starttime, endtime } = req.body;
     try {
         const newTimeSlot = await prisma.timeSlots.create({
-            data: { starttime, endtime }
+            data: { 
+                starttime: starttime, 
+                endtime:endtime 
+            }
         });
         res.status(201).json(newTimeSlot);
     } catch (error) {
