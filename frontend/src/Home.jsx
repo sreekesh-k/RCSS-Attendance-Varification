@@ -3,7 +3,7 @@ import DateSelector from "./Components/home/DateSelector";
 import LevelSelector from "./Components/home/LevelSelector";
 import SemSelector from "./Components/home/SemSelector";
 import CourseSelector from "./Components/home/CourseSelector";
-import TimeslotSelector from "./Components/home/TimeslotSelector";
+import TimeslotSelector from "./Components/home/TimeSlotSelectorV2";
 import TeacherSubjects from "./Components/home/TeacherSubjects";
 import SubmitButton from "./Components/home/SubmitButton";
 import AbsentCheckboxList from "./Components/home/AbsentCheckboxList";
