@@ -2,7 +2,7 @@ const prisma = require('../prismaClient');
 
 const getAllTeachers = async (req, res) => {
     try {
-        const teachers = await prisma.teacher.findMany();
+        const teachers = await prisma.teachers.findMany();
         res.json(teachers);
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching teachers.' });
@@ -12,7 +12,7 @@ const getAllTeachers = async (req, res) => {
 const createTeacher = async (req, res) => {
     const { tname } = req.body;
     try {
-        const newTeacher = await prisma.teacher.create({
+        const newTeacher = await prisma.teachers.create({
             data: { tname }
         });
         res.status(201).json(newTeacher);

@@ -10,7 +10,7 @@ const timeTableRouter = require('./timeTableRoutes')
 router.use('/courses', courseRouter);
 router.use('/subjects', subjectRouter);
 router.use('/teachers', teacherRouter);
-router.use('/time-slots', timeSlotRouter);
+router.use('/timeslots', timeSlotRouter);
 router.use('/timetables', timeTableRouter);
 
 module.exports = router;

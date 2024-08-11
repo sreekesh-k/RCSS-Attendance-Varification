@@ -14,7 +14,9 @@ const createSubject = async (req, res) => {
     const { sname } = req.body;
     try {
         const newSubject = await prisma.subjects.create({
-            data: { sname }
+            data: { 
+                sname: sname.toUpperCase(),
+            }
         });
         res.status(201).json(newSubject);
     } catch (error) {
