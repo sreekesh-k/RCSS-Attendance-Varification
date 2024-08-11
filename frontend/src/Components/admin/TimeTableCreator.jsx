@@ -13,6 +13,8 @@ import LevelSelector from "../home/LevelSelector";
 import SemSelector from "../home/SemSelector";
 import CourseSelector from "../home/CourseSelector";
 import TimeslotSelector from "../home/TimeslotSelector";
+import TeacherSelector from "../home/Teacherselector";
+import SubjectSelector from "../home/SubjectSelector";
 
 function TimeTableCreator() {
   const [day, setDay] = useState("");
@@ -24,6 +26,11 @@ function TimeTableCreator() {
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+
+  const [teachers, setTeachers] = useState([]);
+  const [selectedTeacher, setSelectedTeacher] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
 
   const [error, setError] = useState(null);
 
@@ -70,6 +77,21 @@ function TimeTableCreator() {
           setSelectedTimeSlot={setSelectedTimeSlot}
           selectedCourse={selectedCourse}
         />
+        <TeacherSelector
+          selectedTimeSlot={selectedTimeSlot}
+          teachers={teachers}
+          setTeachers={setTeachers}
+          selectedTeacher={selectedTeacher}
+          setSelectedTeacher={setSelectedTeacher}
+        />
+        <SubjectSelector
+          selectedTeacher={selectedTeacher}
+          subjects={subjects}
+          setSelectedSubject={setSelectedSubject}
+          selectedSubject={selectedSubject}
+          setSubjects={setSubjects}
+        />
+
         <DialogFooter>
           <button
             type="button"
