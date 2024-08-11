@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 
-const uri = 'mongodb://localhost:27017/rcss';
+const uri = process.env.MONGO_URI;
 mongoose.connect(uri);
 const connection = mongoose.connection;
 connection.once('open', () => {
