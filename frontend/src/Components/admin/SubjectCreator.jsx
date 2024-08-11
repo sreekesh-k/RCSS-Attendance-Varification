@@ -8,17 +8,17 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "../ui/dialog";
-function TeacherCreator() {
-  const [teacherName, setTeacherName] = useState("");
+function SubjectCreator() {
+  const [subjectname, setSubjectName] = useState("");
 
   function handleSubmit() {
-    const teacher = { tname: teacherName };
-    fetch("http://localhost:5000/college/teachers", {
+    const subject = { sname: subjectname };
+    fetch("http://localhost:5000/college/subjects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(teacher),
+      body: JSON.stringify(subject),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -35,32 +35,32 @@ function TeacherCreator() {
   return (
     <Dialog>
       <DialogTrigger className="bg-mybl px-4 py-2 rounded-lg text-white m-3">
-        Add New Faculty
+        Add New Subject
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Enter Faculty Details</DialogTitle>
+          <DialogTitle>Enter Subject Details</DialogTitle>
           <DialogDescription>Re-check before submission</DialogDescription>
 
-          <label htmlFor="teacher" className=" font-bold">
-            FacultyName:
+          <label htmlFor="subject" className=" font-bold">
+            SubjectName:
           </label>
           <input
             type="text"
-            name="teacher"
-            id="teacher"
-            value={teacherName}
+            name="subject"
+            id="subject"
+            value={subjectname}
             onChange={(e) => {
-              setTeacherName(e.target.value);
+              setSubjectName(e.target.value);
             }}
-            placeholder="Enter Faculty Name"
+            placeholder="Enter A Subject Name"
             className="bg-transparent border border-mybl rounded-lg px-1 w-full"
           />
         </DialogHeader>
         <DialogFooter>
           <button
             type="button"
-            disabled={!teacherName}
+            disabled={!subjectname}
             className=" bg-mybl px-4 py-2 rounded-lg text-white"
             onClick={handleSubmit}
           >
@@ -72,4 +72,4 @@ function TeacherCreator() {
   );
 }
 
-export default TeacherCreator;
+export default SubjectCreator;

@@ -65,7 +65,7 @@ function Download() {
         </div>
         <button
           type="button"
-          className="bg-mybl px-4 py-2 rounded-lg block"
+          className="bg-mybl px-4 py-2 rounded-lg block bg-opacity-75 text-white"
           onClick={handleDownloadLogs}
         >
           Excel
@@ -82,14 +82,14 @@ function Download() {
             <div className="mt-4 flex justify-end gap-2">
               <button
                 type="button"
-                className="bg-mybl px-4 py-2 rounded-lg"
+                className="bg-mybl bg-opacity-75 px-4 py-2 rounded-lg text-white"
                 onClick={confirmDownload}
               >
                 Confirm
               </button>
               <button
                 type="button"
-                className="bg-red-500 px-4 py-2 rounded-lg"
+                className="bg-red-500 px-4 py-2 rounded-lg text-white"
                 onClick={handleCancel}
               >
                 Cancel
