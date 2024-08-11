@@ -7,8 +7,8 @@ function TimeslotSelector({
   setSelectedTimeSlot,
   selectedCourse,
 }) {
-  const timeslotOptions = timeSlots.map((timeslot, index) => ({
-    value: index.toString(),
+  const timeslotOptions = timeSlots.map((timeslot) => ({
+    value: timeslot.tsid,
     label: `${timeslot.starttime} - ${timeslot.endtime}`,
   }));
 

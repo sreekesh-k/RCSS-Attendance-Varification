@@ -46,7 +46,35 @@ function TimeTableCreator() {
         );
     }
   }, [selectedCourse]);
-  function handleSubmit() {}
+
+  const handleSubmit = () => {
+    const timetable = {
+      day: day,
+      cid: selectedCourse,
+      tsid: selectedTimeSlot,
+      tid: selectedTeacher,
+      sid: selectedSubject,
+    };
+    console.log("Sending Timetable:", JSON.stringify(timetable));
+
+    fetch("http://localhost:5000/college/timetables", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(timetable),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        window.alert("Success");
+        console.log("Log entry created:", data);
+        window.location.reload();
+      })
+      .catch((error) => {
+        window.alert("Error");
+        console.error("Error creating log entry:", error);
+      });
+  };
 
   return (
     <Dialog>

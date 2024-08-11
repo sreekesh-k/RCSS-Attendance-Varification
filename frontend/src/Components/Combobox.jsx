@@ -35,8 +35,6 @@ function Combobox({
     }
   };
 
-  const limitedData = data.slice(0, 5);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger>
@@ -48,7 +46,7 @@ function Combobox({
           disabled={disabled}
         >
           {value
-            ? limitedData.find((item) => item.value === value)?.label
+            ? data.find((item) => item.value === value)?.label
             : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -58,8 +56,8 @@ function Combobox({
           <CommandInput placeholder="Search..." />
           <CommandList>
             <CommandEmpty>{noResultsMessage}</CommandEmpty>
-            <CommandGroup>
-              {limitedData.map((item) => (
+            <CommandGroup className=" max-h-[200px] overflow-y-auto">
+              {data.map((item) => (
                 <CommandItem
                   key={item.value}
                   value={item.value}
