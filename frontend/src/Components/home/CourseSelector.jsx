@@ -12,7 +12,7 @@ function CourseSelector({
 }) {
   useEffect(() => {
     if (level && sem) {
-      fetch(`http://localhost:5000/college/courses?level=${level}&sem=${sem}`)
+      fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/courses?level=${level}&sem=${sem}`)
         .then((response) => response.json())
         .then((data) => {
           setCourses(data);

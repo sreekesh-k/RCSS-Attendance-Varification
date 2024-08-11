@@ -25,7 +25,7 @@ function SubmitButton({
       students: selectedStudents,
     };
 
-    fetch("http://localhost:5000/logs", {
+    fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/logs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -10,7 +10,7 @@ function TeacherSelector({
 }) {
   useEffect(() => {
     if (selectedTimeSlot) {
-      fetch(`http://localhost:5000/college/teachers`)
+      fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/teachers`)
         .then((response) => response.json())
         .then((data) => {
           setTeachers(data);

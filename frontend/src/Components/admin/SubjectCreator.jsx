@@ -13,7 +13,7 @@ function SubjectCreator() {
 
   function handleSubmit() {
     const subject = { sname: subjectname };
-    fetch("http://localhost:5000/college/subjects", {
+    fetch(`${import.meta.env.REACT_APP_API_BASE_URL}college/subjects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

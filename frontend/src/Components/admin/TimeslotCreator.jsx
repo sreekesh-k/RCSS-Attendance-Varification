@@ -13,7 +13,7 @@ function TimeslotCreator() {
   const [endTime, setendTime] = useState("");
   function handleSubmit() {
     const timeslots = { starttime: startTime, endtime: endTime };
-    fetch("http://localhost:5000/college/timeslots", {
+    fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/timeslots`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

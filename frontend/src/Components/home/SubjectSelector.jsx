@@ -10,7 +10,7 @@ function SubjectSelector({
 }) {
   useEffect(() => {
     if (selectedTeacher) {
-      fetch(`http://localhost:5000/college/subjects`)
+      fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/subjects`)
         .then((response) => response.json())
         .then((data) => {
           setSubjects(data);

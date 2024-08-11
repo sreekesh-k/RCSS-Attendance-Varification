@@ -13,7 +13,7 @@ function TeacherCreator() {
 
   function handleSubmit() {
     const teacher = { tname: teacherName };
-    fetch("http://localhost:5000/college/teachers", {
+    fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/teachers`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

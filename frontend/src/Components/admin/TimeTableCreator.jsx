@@ -36,7 +36,7 @@ function TimeTableCreator() {
 
   useEffect(() => {
     if (selectedCourse) {
-      fetch(`http://localhost:5000/college/timeslots`)
+      fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/timeslots`)
         .then((response) => response.json())
         .then((data) => {
           setTimeSlots(data);
@@ -57,7 +57,7 @@ function TimeTableCreator() {
     };
     console.log("Sending Timetable:", JSON.stringify(timetable));
 
-    fetch("http://localhost:5000/college/timetables", {
+    fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/timetables`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

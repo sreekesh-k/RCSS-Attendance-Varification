@@ -16,7 +16,7 @@ function CourseCreator() {
 
   function handleSubmit() {
     const course = { cname: courseName, sem: sem, level: level };
-    fetch("http://localhost:5000/college/courses", {
+    fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/courses`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

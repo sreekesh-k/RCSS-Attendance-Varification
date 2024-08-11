@@ -18,7 +18,7 @@ function Download() {
 
   const confirmDownload = () => {
     fetch(
-      `http://localhost:5000/logs/all?startDate=${startDate}&endDate=${endDate}`
+      `${import.meta.env.REACT_APP_API_BASE_URL}/logs/all?startDate=${startDate}&endDate=${endDate}`
     )
       .then((response) => response.json())
       .then((logs) => {

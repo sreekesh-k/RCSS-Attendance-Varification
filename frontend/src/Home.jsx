@@ -40,7 +40,7 @@ function Home() {
   useEffect(() => {
     if (selectedCourse) {
       fetch(
-        `http://localhost:5000/college/timetables?cid=${selectedCourse}&day=${day}`
+        `${import.meta.env.REACT_APP_API_BASE_URL}/college/timetables?cid=${selectedCourse}&day=${day}`
       )
         .then((response) => response.json())
         .then((data) => {
