@@ -1,0 +1,87 @@
+import React, { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "../ui/dialog";
+import DaySelector from "./DaySelector";
+import LevelSelector from "../home/LevelSelector";
+import SemSelector from "../home/SemSelector";
+import CourseSelector from "../home/CourseSelector";
+import TimeslotSelector from "../home/TimeslotSelector";
+
+function TimeTableCreator() {
+  const [day, setDay] = useState("");
+  const [level, setLevel] = useState();
+  const [sem, setSem] = useState("");
+
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState("");
+
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (selectedCourse) {
+      fetch(`http://localhost:5000/college/timeslots`)
+        .then((response) => response.json())
+        .then((data) => {
+          setTimeSlots(data);
+        })
+        .catch((error) =>
+          setError("Error fetching timeslots: " + error.message)
+        );
+    }
+  }, [selectedCourse]);
+  function handleSubmit() {}
+
+  return (
+    <Dialog>
+      <DialogTrigger className="bg-mybl px-4 py-2 rounded-lg text-white m-3">
+        Add New TimeTable
+      </DialogTrigger>
+      <DialogContent className="w-full">
+        <DialogHeader>
+          <DialogTitle>Enter TimeTable Details</DialogTitle>
+          <DialogDescription>Re-check before submission</DialogDescription>
+        </DialogHeader>
+
+        <DaySelector day={day} setDay={setDay} />
+        <LevelSelector setLevel={setLevel} day={day} />
+        <SemSelector sem={sem} setSem={setSem} level={level} />
+        <CourseSelector
+          courses={courses}
+          selectedCourse={selectedCourse}
+          setSelectedCourse={setSelectedCourse}
+          sem={sem}
+          level={level}
+          setCourses={setCourses}
+          setError={setError}
+        />
+        <TimeslotSelector
+          timeSlots={timeSlots}
+          selectedTimeSlot={selectedTimeSlot}
+          setSelectedTimeSlot={setSelectedTimeSlot}
+          selectedCourse={selectedCourse}
+        />
+        <DialogFooter>
+          <button
+            type="button"
+            className="bg-mybl px-4 py-2 rounded-lg text-white"
+            onClick={handleSubmit}
+          >
+            SUBMIT
+          </button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default TimeTableCreator;

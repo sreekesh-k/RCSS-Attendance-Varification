@@ -37,6 +37,25 @@ function Home() {
     }
   }, [selectedTimeSlot, teachers, subjects]);
 
+  useEffect(() => {
+    if (selectedCourse) {
+      fetch(
+        `http://localhost:5000/college/timetables?cid=${selectedCourse}&day=${day}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const ts = data.map((tt) => tt.timeslots);
+          setTimeSlots(ts);
+          const tr = data.map((tt) => tt.teachers.tname);
+          setTeachers(tr);
+          const sb = data.map((tt) => tt.subjects.sname);
+          setSubjects(sb);
+        })
+        .catch((error) =>
+          setError("Error fetching timeslots: " + error.message)
+        );
+    }
+  }, [selectedCourse, day]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -64,10 +83,6 @@ function Home() {
               sem={sem}
               level={level}
               setCourses={setCourses}
-              setTimeSlots={setTimeSlots}
-              setTeachers={setTeachers}
-              setSubjects={setSubjects}
-              day={day}
               setError={setError}
             />
 

@@ -3,6 +3,7 @@ import CourseCreator from "./Components/admin/CourseCreator";
 import TeacherCreator from "./Components/admin/TeacherCreator";
 import SubjectCreator from "./Components/admin/SubjectCreator";
 import TimeslotCreator from "./Components/admin/TimeslotCreator";
+import TimeTableCreator from "./Components/admin/TimeTableCreator";
 function Admin() {
   return (
     <>
@@ -11,6 +12,7 @@ function Admin() {
         <TeacherCreator />
         <SubjectCreator />
         <TimeslotCreator />
+        <TimeTableCreator />
       </main>
     </>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import Combobox from "../Combobox";
 
 function TimeslotSelector({
   timeSlots,
@@ -6,27 +7,24 @@ function TimeslotSelector({
   setSelectedTimeSlot,
   selectedCourse,
 }) {
+  const timeslotOptions = timeSlots.map((timeslot, index) => ({
+    value: index.toString(),
+    label: `${timeslot.starttime} - ${timeslot.endtime}`,
+  }));
+
   return (
     <div className="flex gap-5 w-full">
-      <label htmlFor="timeslot" className=" font-bold">
+      <label htmlFor="timeslot" className="font-bold">
         Timeslot:
       </label>
-      <select
-        id="timeslot"
+      <Combobox
+        data={timeslotOptions}
+        defaultValue={selectedTimeSlot}
+        placeholder="--Select Timeslot--"
+        noResultsMessage="No timeslot found."
+        onChange={(value) => setSelectedTimeSlot(value)}
         disabled={!selectedCourse}
-        value={selectedTimeSlot}
-        onChange={(e) => setSelectedTimeSlot(e.target.value)}
-        className="bg-transparent border border-mybl rounded-lg px-1 w-full text-center"
-      >
-        <option value="" className="text-black">
-          --Select Timeslot--
-        </option>
-        {timeSlots.map((timeslot, index) => (
-          <option key={timeslot.tsid} value={index} className="text-black">
-            {timeslot.starttime} - {timeslot.endtime}
-          </option>
-        ))}
-      </select>
+      />
     </div>
   );
 }

@@ -27,10 +27,16 @@ const getAllTimeTables = async (req, res) => {
     }
 }
 const createTimeTable = async (req, res) => {
-    const { day, cid, tsid, ttsid } = req.body;
+    const {  day,cid,tsid, tid,sid } = req.body;
     try {
-        const newTimetable = await prisma.timetable.create({
-            data: { day, cid, tsid, ttsid }
+        const newTimetable = await prisma.timeTables.create({
+            data: { 
+                day:day.toUpperCase(), 
+                cid: parseInt(cid), 
+                tsid: parseInt(tsid), 
+                tid: parseInt(tid),
+                sid: parseInt(sid) 
+            }
         });
         res.status(201).json(newTimetable);
     } catch (error) {
