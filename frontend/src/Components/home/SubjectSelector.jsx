@@ -30,7 +30,7 @@ function SubjectSelector({
           label: subject.sname,
         }))}
         defaultValue={selectedSubject}
-        placeholder="--Select Faculty--"
+        placeholder="--Select Subject--"
         noResultsMessage="No faculty found."
         onChange={(value) => setSelectedSubject(value)}
         disabled={!selectedTeacher}
