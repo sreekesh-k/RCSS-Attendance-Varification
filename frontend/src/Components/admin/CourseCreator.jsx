@@ -37,7 +37,7 @@ function CourseCreator() {
 
   return (
     <Dialog>
-      <DialogTrigger className="bg-mybl px-4 py-2 rounded-lg text-white m-3">
+      <DialogTrigger className="bg-mybl px-4 py-2 rounded-lg text-white m-3 w-full">
         Add New Course
       </DialogTrigger>
       <DialogContent>
