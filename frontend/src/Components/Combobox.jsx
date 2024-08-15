@@ -28,7 +28,7 @@ function Combobox({
 
   const handleSelect = (currentValue) => {
     const newValue = currentValue === value ? "" : currentValue;
-    setValue(newValue);
+    setValue(newValue.id);
     setOpen(false);
     if (onChange) {
       onChange(newValue);
@@ -61,7 +61,7 @@ function Combobox({
                 <CommandItem
                   key={item.value}
                   value={item.value}
-                  onSelect={() => handleSelect(item.value)}
+                  onSelect={() => handleSelect({id:item.value, name:item.label})}
                 >
                   <Check
                     className={cn(

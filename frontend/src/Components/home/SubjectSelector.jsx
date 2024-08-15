@@ -32,7 +32,7 @@ function SubjectSelector({
         defaultValue={selectedSubject}
         placeholder="--Select Subject--"
         noResultsMessage="No faculty found."
-        onChange={(value) => setSelectedSubject(value)}
+        onChange={({id,name}) => setSelectedSubject(id)}
         disabled={!selectedTeacher}
       />
     </div>

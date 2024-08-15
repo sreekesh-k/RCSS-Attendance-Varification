@@ -22,7 +22,7 @@ function TimeslotSelector({
         defaultValue={selectedTimeSlot}
         placeholder="--Select Timeslot--"
         noResultsMessage="No timeslot found."
-        onChange={(value) => setSelectedTimeSlot(value)}
+        onChange={({id,name}) => setSelectedTimeSlot(id)}
         disabled={!selectedCourse}
       />
     </div>

@@ -32,7 +32,7 @@ function TeacherSelector({
         defaultValue={selectedTeacher}
         placeholder="--Select Faculty--"
         noResultsMessage="No faculty found."
-        onChange={(value) => setSelectedTeacher(value)}
+        onChange={({ id, name }) => setSelectedTeacher(id)}
         disabled={!selectedTimeSlot}
       />
     </div>

@@ -22,7 +22,10 @@ function TimeTableCreator() {
   const [sem, setSem] = useState("");
 
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState({
+    id:"",
+    name:""
+  });
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
@@ -35,7 +38,7 @@ function TimeTableCreator() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (selectedCourse) {
+    if (selectedCourse.id) {
       fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/timeslots`)
         .then((response) => response.json())
         .then((data) => {
@@ -45,12 +48,12 @@ function TimeTableCreator() {
           setError("Error fetching timeslots: " + error.message)
         );
     }
-  }, [selectedCourse]);
+  }, [selectedCourse.id]);
 
   const handleSubmit = () => {
     const timetable = {
       day: day,
-      cid: selectedCourse,
+      cid: selectedCourse.id,
       tsid: selectedTimeSlot,
       tid: selectedTeacher,
       sid: selectedSubject,
@@ -103,7 +106,7 @@ function TimeTableCreator() {
           timeSlots={timeSlots}
           selectedTimeSlot={selectedTimeSlot}
           setSelectedTimeSlot={setSelectedTimeSlot}
-          selectedCourse={selectedCourse}
+          selectedCourse={selectedCourse.id}
         />
         <TeacherSelector
           selectedTimeSlot={selectedTimeSlot}

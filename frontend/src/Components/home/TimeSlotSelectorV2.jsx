@@ -18,7 +18,7 @@ function TimeslotSelectorV2({
         onChange={(e) => setSelectedTimeSlot(e.target.value)}
         className="bg-transparent border border-mybl rounded-lg px-1 w-full text-center"
       >
-        <option value="" className="text-black">
+        <option key="def" value="" className="text-black">
           --Select Timeslot--
         </option>
         {timeSlots.map((timeslot, index) => (

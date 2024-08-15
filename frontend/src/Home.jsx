@@ -16,7 +16,10 @@ function Home() {
   const [sem, setSem] = useState("");
 
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState({
+    id:"",
+    name:""
+  });
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [startTime, setStartTime] = useState("");
@@ -38,9 +41,9 @@ function Home() {
   }, [selectedTimeSlot, teachers, subjects]);
 
   useEffect(() => {
-    if (selectedCourse) {
+    if (selectedCourse.id) {
       fetch(
-        `${import.meta.env.REACT_APP_API_BASE_URL}/college/timetables?cid=${selectedCourse}&day=${day}`
+        `${import.meta.env.REACT_APP_API_BASE_URL}/college/timetables?cid=${selectedCourse.id}&day=${day}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -55,7 +58,7 @@ function Home() {
           setError("Error fetching timeslots: " + error.message)
         );
     }
-  }, [selectedCourse, day]);
+  }, [selectedCourse.id, day]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -90,7 +93,7 @@ function Home() {
               timeSlots={timeSlots}
               selectedTimeSlot={selectedTimeSlot}
               setSelectedTimeSlot={setSelectedTimeSlot}
-              selectedCourse={selectedCourse}
+              selectedCourse={selectedCourse.id}
             />
 
             <TeacherSubjects
@@ -114,7 +117,7 @@ function Home() {
               selectedDate={selectedDate}
               startTime={startTime}
               endTime={endTime}
-              selectedCourse={selectedCourse}
+              selectedCourse={selectedCourse.name}
               sem={sem}
               selectedSubject={selectedSubject}
               selectedTeacher={selectedTeacher}

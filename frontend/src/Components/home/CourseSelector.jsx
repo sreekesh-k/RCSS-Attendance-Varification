@@ -12,7 +12,11 @@ function CourseSelector({
 }) {
   useEffect(() => {
     if (level && sem) {
-      fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/courses?level=${level}&sem=${sem}`)
+      fetch(
+        `${
+          import.meta.env.REACT_APP_API_BASE_URL
+        }/college/courses?level=${level}&sem=${sem}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setCourses(data);
@@ -20,8 +24,6 @@ function CourseSelector({
         .catch((error) => setError("Error fetching courses: " + error.message));
     }
   }, [level, sem]);
-
- 
 
   return (
     <div className="flex gap-5 w-full">
@@ -36,7 +38,9 @@ function CourseSelector({
         defaultValue={selectedCourse}
         placeholder="--Select Course--"
         noResultsMessage="No courses found."
-        onChange={(value) => setSelectedCourse(value)}
+        onChange={({ id, name }) => {
+          setSelectedCourse({ id: id, name: name });
+        }}
         disabled={!sem}
       />
     </div>
