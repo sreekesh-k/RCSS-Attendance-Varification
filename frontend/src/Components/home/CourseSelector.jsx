@@ -9,6 +9,7 @@ function CourseSelector({
   level,
   setCourses,
   setError,
+  isLoading
 }) {
   useEffect(() => {
     if (level && sem) {
@@ -41,7 +42,7 @@ function CourseSelector({
         onChange={({ id, name }) => {
           setSelectedCourse({ id: id, name: name });
         }}
-        disabled={!sem}
+        disabled={!sem || isLoading}
       />
     </div>
   );

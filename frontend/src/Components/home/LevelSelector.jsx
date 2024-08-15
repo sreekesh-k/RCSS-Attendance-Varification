@@ -1,6 +1,6 @@
 import React from "react";
 
-function LevelSelector({ setLevel, day }) {
+function LevelSelector({ setLevel, day,isLoading }) {
   return (
     <div className=" w-full flex gap-5">
       <div className=" font-bold">Level:</div>
@@ -9,7 +9,7 @@ function LevelSelector({ setLevel, day }) {
           type="radio"
           name="level"
           value="UG"
-          disabled={!day}
+          disabled={!day || isLoading}
           onChange={() => setLevel("UG")}
         />
         UG
@@ -19,7 +19,7 @@ function LevelSelector({ setLevel, day }) {
           type="radio"
           name="level"
           value="PG"
-          disabled={!day}
+          disabled={!day || isLoading}
           onChange={() => setLevel("PG")}
         />
         PG

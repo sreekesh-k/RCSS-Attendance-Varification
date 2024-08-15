@@ -7,6 +7,7 @@ function SubjectSelector({
   subjects,
   selectedSubject,
   setSelectedSubject,
+  isLoading,
 }) {
   useEffect(() => {
     if (selectedTeacher) {
@@ -32,8 +33,8 @@ function SubjectSelector({
         defaultValue={selectedSubject}
         placeholder="--Select Subject--"
         noResultsMessage="No faculty found."
-        onChange={({id,name}) => setSelectedSubject(id)}
-        disabled={!selectedTeacher}
+        onChange={({ id, name }) => setSelectedSubject(id)}
+        disabled={!selectedTeacher || isLoading}
       />
     </div>
   );

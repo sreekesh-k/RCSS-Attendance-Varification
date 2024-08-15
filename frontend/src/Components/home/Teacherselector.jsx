@@ -7,6 +7,7 @@ function TeacherSelector({
   teachers,
   selectedTeacher,
   setSelectedTeacher,
+  isLoading,
 }) {
   useEffect(() => {
     if (selectedTimeSlot) {
@@ -33,7 +34,7 @@ function TeacherSelector({
         placeholder="--Select Faculty--"
         noResultsMessage="No faculty found."
         onChange={({ id, name }) => setSelectedTeacher(id)}
-        disabled={!selectedTimeSlot}
+        disabled={!selectedTimeSlot || isLoading}
       />
     </div>
   );

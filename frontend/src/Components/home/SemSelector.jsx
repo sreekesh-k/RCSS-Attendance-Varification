@@ -1,6 +1,6 @@
 import React from "react";
 
-function SemSelector({sem, setSem, level}) {
+function SemSelector({ sem, setSem, level, isLoading }) {
   return (
     <div className="flex gap-5 w-full">
       <label htmlFor="sem" className=" font-bold">
@@ -8,7 +8,7 @@ function SemSelector({sem, setSem, level}) {
       </label>
       <select
         id="sem"
-        disabled={!level}
+        disabled={!level || isLoading}
         value={sem}
         onChange={(e) => setSem(e.target.value)}
         className="bg-transparent border border-mybl rounded-lg px-1 w-full text-center"

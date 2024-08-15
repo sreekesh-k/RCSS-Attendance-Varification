@@ -6,6 +6,7 @@ function TimeslotSelector({
   selectedTimeSlot,
   setSelectedTimeSlot,
   selectedCourse,
+  isLoading
 }) {
   const timeslotOptions = timeSlots.map((timeslot) => ({
     value: timeslot.tsid,
@@ -23,7 +24,7 @@ function TimeslotSelector({
         placeholder="--Select Timeslot--"
         noResultsMessage="No timeslot found."
         onChange={({id,name}) => setSelectedTimeSlot(id)}
-        disabled={!selectedCourse}
+        disabled={!selectedCourse || isLoading}
       />
     </div>
   );

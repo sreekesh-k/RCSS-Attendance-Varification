@@ -1,6 +1,6 @@
 import React from "react";
 
-function DaySelector({ day, setDay }) {
+function DaySelector({ day, setDay , isLoading}) {
   const daysOfWeek = [
     "Monday",
     "Tuesday",
@@ -16,6 +16,7 @@ function DaySelector({ day, setDay }) {
       <select
         className="bg-transparent border border-mybl rounded-lg w-fit text-center"
         value={day}
+        disabled={isLoading}
         onChange={(e) => setDay(e.target.value)}
       >
         <option value="">--Select a day--</option>

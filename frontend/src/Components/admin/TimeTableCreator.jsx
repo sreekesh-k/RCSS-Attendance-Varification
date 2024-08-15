@@ -23,8 +23,8 @@ function TimeTableCreator() {
 
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({
-    id:"",
-    name:""
+    id: "",
+    name: "",
   });
 
   const [timeSlots, setTimeSlots] = useState([]);
@@ -34,8 +34,9 @@ function TimeTableCreator() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
-
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (selectedCourse.id) {
@@ -69,13 +70,23 @@ function TimeTableCreator() {
     })
       .then((response) => response.json())
       .then((data) => {
-        window.alert("Success");
-        console.log("Log entry created:", data);
-        window.location.reload();
+        setSuccess("New TimeTable Created");
+        setDay("");
+        setSem("");
+        setCourses([]);
+        setSubjects([]);
+        setTeachers([]);
+        setTimeSlots([]);
+        setSelectedTimeSlot("");
+        setSelectedCourse("");
+        setSelectedCourse("");
+        setSelectedTeacher("");
       })
       .catch((error) => {
-        window.alert("Error");
-        console.error("Error creating log entry:", error);
+        setError("Error: Could not Create New TimeTable");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -90,9 +101,9 @@ function TimeTableCreator() {
           <DialogDescription>Re-check before submission</DialogDescription>
         </DialogHeader>
 
-        <DaySelector day={day} setDay={setDay} />
-        <LevelSelector setLevel={setLevel} day={day} />
-        <SemSelector sem={sem} setSem={setSem} level={level} />
+        <DaySelector day={day} setDay={setDay} isLoading={isLoading}/>
+        <LevelSelector setLevel={setLevel} day={day} isLoading={isLoading}/>
+        <SemSelector sem={sem} setSem={setSem} level={level} isLoading={isLoading}/>
         <CourseSelector
           courses={courses}
           selectedCourse={selectedCourse}
@@ -101,12 +112,14 @@ function TimeTableCreator() {
           level={level}
           setCourses={setCourses}
           setError={setError}
+          isLoading={isLoading}
         />
         <TimeslotSelector
           timeSlots={timeSlots}
           selectedTimeSlot={selectedTimeSlot}
           setSelectedTimeSlot={setSelectedTimeSlot}
           selectedCourse={selectedCourse.id}
+          isLoading={isLoading}
         />
         <TeacherSelector
           selectedTimeSlot={selectedTimeSlot}
@@ -114,6 +127,7 @@ function TimeTableCreator() {
           setTeachers={setTeachers}
           selectedTeacher={selectedTeacher}
           setSelectedTeacher={setSelectedTeacher}
+          isLoading={isLoading}
         />
         <SubjectSelector
           selectedTeacher={selectedTeacher}
@@ -121,16 +135,45 @@ function TimeTableCreator() {
           setSelectedSubject={setSelectedSubject}
           selectedSubject={selectedSubject}
           setSubjects={setSubjects}
+          isLoading={isLoading}
         />
 
+        {error && <p className="text-red-500">{error}</p>}
+        {success && <p className="text-green-500">{success}</p>}
         <DialogFooter>
           <button
             type="button"
-            className="bg-mybl px-4 py-2 rounded-lg text-white "
+            disabled={!(selectedSubject && day) || error || isLoading}
+            className="bg-mybl px-4 py-2 rounded-lg text-white"
             onClick={handleSubmit}
-            disabled={!selectedSubject}
           >
-            SUBMIT
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white inline mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  ></path>
+                </svg>
+                <span>Submiting...</span>
+              </>
+            ) : (
+              "SUBMIT"
+            )}
           </button>
         </DialogFooter>
       </DialogContent>
