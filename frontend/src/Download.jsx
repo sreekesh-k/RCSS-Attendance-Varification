@@ -18,7 +18,9 @@ function Download() {
 
   const confirmDownload = () => {
     fetch(
-      `${import.meta.env.REACT_APP_API_BASE_URL}/logs/all?startDate=${startDate}&endDate=${endDate}`
+      `${
+        import.meta.env.REACT_APP_API_BASE_URL
+      }/logs/all?startDate=${startDate}&endDate=${endDate}`
     )
       .then((response) => response.json())
       .then((logs) => {
@@ -42,37 +44,43 @@ function Download() {
   };
   return (
     <>
-      <footer className="w-full flex justify-center items-center gap-5 mt-5 p-4 relative">
-        <div className="relative w-fit">
-          <label htmlFor="from">From :</label>
-          <input
-            id="from"
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="bg-transparent border border-mybl rounded-lg px-2 w-fit"
-          />
+      <section className="relative h-[88svh]">
+        <div className="w-full flex justify-center items-center gap-5 mt-5 p-4">
+          <div className="relative w-fit">
+            <label htmlFor="from" className="font-bold">
+              From :
+            </label>
+            <input
+              id="from"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="bg-transparent border border-mybl rounded-lg px-2 w-fit"
+            />
+          </div>
+          <div className="relative w-fit">
+            <label htmlFor="to" className="font-bold">
+              To :
+            </label>
+            <input
+              id="to"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="bg-transparent border border-mybl rounded-lg px-2 w-fit"
+            />
+          </div>
+          <button
+            type="button"
+            className="bg-mybl px-4 py-2 rounded-lg block  text-white h-fit"
+            onClick={handleDownloadLogs}
+          >
+            Excel
+          </button>
         </div>
-        <div className="relative w-fit">
-          <label htmlFor="to">To :</label>
-          <input
-            id="to"
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="bg-transparent border border-mybl rounded-lg px-2 w-fit"
-          />
-        </div>
-        <button
-          type="button"
-          className="bg-mybl px-4 py-2 rounded-lg block bg-opacity-75 text-white"
-          onClick={handleDownloadLogs}
-        >
-          Excel
-        </button>
-      </footer>
+      </section>
       {showConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
           <div className="bg-white p-5 rounded-lg text-black">
             <h3 className="mb-4">Confirm Download</h3>
             <p>
@@ -89,7 +97,7 @@ function Download() {
               </button>
               <button
                 type="button"
-                className="bg-red-500 px-4 py-2 rounded-lg text-white"
+                className="bg-slate-500 px-4 py-2 rounded-lg text-white"
                 onClick={handleCancel}
               >
                 Cancel
