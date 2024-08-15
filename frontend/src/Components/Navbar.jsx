@@ -67,9 +67,9 @@ function Navbar() {
                     height="100%"
                     preserveAspectRatio="xMidYMid meet"
                   >
-                    <rect width="80" height="10" />
-                    <rect y="20" width="80" height="10" />
-                    <rect y="40" width="80" height="10" />
+                    <rect width="80" height="5" />
+                    <rect y="20" width="80" height="5" />
+                    <rect y="40" width="80" height="5" />
                   </svg>
                 </div>
               </SheetTrigger>
