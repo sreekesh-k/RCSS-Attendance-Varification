@@ -31,6 +31,8 @@ function SubjectCreator() {
   }
 
   function handleSubmit() {
+    if (error) return;
+    setIsLoading(true);
     const subject = { sname: subjectname };
     fetch(`${import.meta.env.REACT_APP_API_BASE_URL}/college/subjects`, {
       method: "POST",

@@ -52,6 +52,8 @@ function TimeTableCreator() {
   }, [selectedCourse.id]);
 
   const handleSubmit = () => {
+    if (error) return;
+    setIsLoading(true);
     const timetable = {
       day: day,
       cid: selectedCourse.id,
